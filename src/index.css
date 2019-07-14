@@ -1,6 +1,7 @@
 body{
 	padding: 0px;
-	margin: 0px;
+	margin: 0px;	
+	background-color: #f4f6f8;
 }
 
 .styling1{
@@ -41,6 +42,16 @@ body{
 	color:black
 }
 
+.navLink {
+	text-decoration: none;
+	color:white;
+}
+
+.navLink:hover{
+	text-decoration: none;
+	color:white;
+}
+
 .logoImage{
 border-radius:50%;
 color:white;
@@ -62,4 +73,50 @@ flex-direction: row;
 .pricing .first {
 	color:red;
 	flex:1;
+}
+
+
+.navLogo {
+	width:30px;
+	height: 30px;
+	border-radius: 100%;
+	margin: 10px;
+}
+
+.footerLogo {
+	width:30px;
+	height: 30px;
+	border-radius: 100%;
+	margin: 10px;
+}
+
+.z-index{
+	position:fixed;
+	z-index: 3;
+}
+
+
+
+@media only screen and (min-width:375px) {
+
+
+}
+
+.main {
+	min-height: 100vh;
+}
+
+.details-header{
+	background-color:#1c2260;
+	padding: 10px;
+
+}
+
+.sidebar-header{
+	background-color:#1c2260; 
+	padding: 10px;
+}
+
+.danger{
+	border:3px solid red;
 }

@@ -1,24 +1,38 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link,withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-const Card = () => (
-
-<div className = " pa2 center pb3 shadow-4 grow   mb5 pointer" style={{ width:250, height:"auto" }}>
-		<Link className='links2'>
+const Card = ({panel}) =>{
+	const card = panel.map((val,i)=> (
+		<Link key={i} className = "links2 pa2 center pb3  grow   mb5 pointer" style={{ width:250, height:"auto" }}  to={`/purchase/${val.id}`}>
 			<div className='pa3 panel-image'>
-				<img alt="" src ='' style ={{width:250, height:'auto'}}/>
+				<img alt="" src ={val.image} style ={{width:250, height:'auto'}}/>
 			</div>
 			<br />
-			<h6 className='font tc'>something herer!!</h6>
+			<h6 className='font tc'>{val.title}</h6>
 			<div className='pricing'>
-				<p className='first'>$300</p>
+				<p className='first'>${val.price}</p>
 				<p style={{width:'20px',height:'20px',borderRadius:'100%',border:'2px solid pink'}}></p>
-				<p>50</p>
-			</div>
-		</Link> 
-</div>
+				<p style={{marginLeft:'2px'}}>{val.stock}</p>
+		</div>
+	</Link> 
+))
 
-)
+	return (
+			<React.Fragment>
+			{card}
+			</React.Fragment>
+
+		)
+
+} 
+		
+		
+const mapStateToProps=(state)=> {
+	return {
+		panel:state.data
+	}
+}
 	
 
-export default Card;
+export default withRouter(connect(mapStateToProps,null)(Card));
