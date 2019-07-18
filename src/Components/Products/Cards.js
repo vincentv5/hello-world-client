@@ -1,10 +1,26 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { Link,withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Get_panels } from '../Store/Action';
 
-const Card = ({panel}) =>{
-	const card = panel.map((val,i)=> (
-		<Link key={i} className = "links2 pa2 center pb3  grow   mb5 pointer" style={{ width:250, height:"auto" }}  to={`/purchase/${val.id}`}>
+class Card extends Component{
+	constructor(props) {
+		super(props);
+		this.state={
+			panel:null,
+		}
+	}
+
+	componentDidMount() {
+	this.props.Get_panels();
+	}
+
+	
+
+	render() {
+		
+	const card =this.props.panel.map((val,i)=> (
+		<Link key={val._id} className = "links2 pa2 center pb3  grow   mb5 pointer" style={{ width:250, height:"auto" }}  to={`/purchase/${val._id}`}>
 			<div className='pa3 panel-image'>
 				<img alt="" src ={val.image} style ={{width:250, height:'auto'}}/>
 			</div>
@@ -24,10 +40,10 @@ const Card = ({panel}) =>{
 			</React.Fragment>
 
 		)
+}
 
 } 
-		
-		
+			
 const mapStateToProps=(state)=> {
 	return {
 		panel:state.data
@@ -35,4 +51,4 @@ const mapStateToProps=(state)=> {
 }
 	
 
-export default withRouter(connect(mapStateToProps,null)(Card));
+export default withRouter(connect(mapStateToProps,{Get_panels})(Card));

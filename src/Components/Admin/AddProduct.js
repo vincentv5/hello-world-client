@@ -6,41 +6,63 @@ import { Create_panel } from '../Store/Action';
 	constructor(props) {
  		super(props);
  		this.state={
- 			title:null,
- 			description:null,
- 			stock:null,
- 			price:null,
- 			image:null,
- 			id:null,
+ 			title:'',
+ 			description:'',
+ 			stock:'',
+ 			price:'',
+ 			image:'',
+ 			license:'',
+ 			keys:'',
  			error:false,
- 			success:false
+ 			success:false,
+ 		
  		}
  	}
 
  
 	handleSubmit=(e)=> {
 		e.preventDefault();
-		const {title,description,stock,price}=this.state;
-		if(!title || !description || !stock || !price) {
+		const {title,description,stock,price,keys}=this.state;
+		if(!title || !description || !stock || !price || !keys) {
 			this.setState({error:true,success:false});
 			return;
 		}
-		this.props.Create_panel(this.state);
+		this.props.Create_panel({title,description,stock,price,keys}).then(()=>{
+		}).catch(()=> {
+		this.setState({error:true,success:false});
+		});
 			this.setState({
 			title:'',
  			description:'',
  			stock:'',
  			price:'',
  			image:'',
- 			id:'',
+ 			license:'',
+ 			keys:'',
  			success:true,
 		});	
+		window.scrollTo(0, 0);
 	}
 
 	handleInput=(e)=> {
-		this.setState({
-			[e.target.name]:e.target.value
-		})
+
+		if(e.target.name === 'license') {
+				const arr = e.target.value.split(/[\n\s]/gi);
+				console.log(arr);
+				this.setState({
+				keys:arr,
+				[e.target.name]:e.target.value
+			
+				})
+				
+
+			}else {
+				this.setState({
+					[e.target.name]:e.target.value
+				})
+				
+			}
+		
 	}	
 
 	focus=()=> {
@@ -48,7 +70,7 @@ import { Create_panel } from '../Store/Action';
 	}
 	render() {
 		const error = this.state.error;
-		const {title,description,stock,price,image,id } = this.state;
+		const {title,description,stock,price,image,id ,license} = this.state;
 		const err = error ? 'danger' : ''
 		const success = this.state.success?(<div className='col-sm-5 m-auto alert alert-success'>you have successfully added a package</div>): '';
 		const errMessage = error ? (<div className='col-sm-5 m-auto alert alert-danger'>all fields are required</div>)  : ''
@@ -89,11 +111,10 @@ import { Create_panel } from '../Store/Action';
 						<input onFocus={this.focus} onChange={this.handleInput} className={`${err} pa2 input-reset ba bg-transparent   w-100`} type="file" name="image"  id="image" value={image} />
 					  </div>
 
-					    <div className="mt3">
-						<label className="fw6 lh-copy f6 font" htmlFor="Name">id</label>
-						<input onFocus={this.focus} onChange={this.handleInput} className={`${err} pa2 input-reset ba bg-transparent   w-100`} type="number" name="id"  id="id" value={id}/>
+					  <div className="mt3">
+						<label className="fw6 lh-copy f6 font" htmlFor="Name">licenseKeys</label>
+						<textarea onFocus={this.focus} onChange={this.handleInput} className={`${err} pa2 input-reset ba bg-transparent   w-100`} type="text" name="license"  id="license" value={license}/>
 					  </div>
-
 					</fieldset>
 					<div>
 					  <button style={{backgroundColor:'#1c2260',color:'white'}} className="btn form-control" type="submit">Add package</button>

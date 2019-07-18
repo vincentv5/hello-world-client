@@ -9,6 +9,19 @@ import {BrowserRouter} from 'react-router-dom';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import store from './Components/Store';
+import jwtDecode  from 'jwt-decode';
+import {setAuthorizationHeader} from './Components/Store/Action';
+import { login } from './Components/Store/ActionsCreator';
+
+if(localStorage.getItem('jwt')) {
+		setAuthorizationHeader(localStorage.getItem('jwt'));
+		try{
+			store.dispatch(login(jwtDecode(localStorage.getItem('jwt'))))	
+
+		}catch{
+				store.dispatch(login({}))
+		}
+}
 
 
 

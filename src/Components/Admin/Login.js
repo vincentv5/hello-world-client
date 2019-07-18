@@ -9,17 +9,27 @@ class Login extends Component {
  		this.state={
  			email:'',
  			password:'',
+ 			error:false,
+ 			success:false,
+ 			serverErr:false,
  		}
  	}
 
  
 	handleSubmit=(e)=> {
-		console.log('handled');
 		e.preventDefault();
 		const { email, password} = this.state;
-		this.props.Login_user(this.state);
+		if(!email || !password) {
+			return this.setState({error:true,success:false,isDeleted:false});
+		}
 
-		this.props.history.push('/admin/products');
+		this.props.Login_user({email,password}).then(()=>{
+			this.props.history.push('/admin/products');
+			return this.setState({error:false,success:true,isDeleted:false});
+		}).catch(()=> {
+			return this.setState({error:true,success:false,isDeleted:false,serverErr:true});
+		})
+		
 	}
 
 	handleInput=(e)=> {
@@ -27,8 +37,21 @@ class Login extends Component {
 			[e.target.name]:e.target.value
 		})
 	}	
+
+	focus=()=> {
+		this.setState({error:false,success:false,isDeleted:false})
+	}
+
+
 	render() {
 		const { email , password}=this.state;
+
+		const error = this.state.error;
+		const err = error ? 'danger' : ''
+		const errMessage = error ? (<div className='col-sm-5 m-auto alert alert-danger'>all fields are required</div>)  : ''
+		const serverErr = this.state.serverErr ? (<div className='col-sm-5 m-auto alert alert-danger'>untrusted credentials ..</div>)  : ''
+
+
 		return (
 			<div className='container main'>
 			<br />
@@ -37,18 +60,20 @@ class Login extends Component {
 				<h6 className='ml2' style={{color:'white'}}>Good day Mr Palito</h6>
 				</header>
 				<br />
+				
 				<h5 className='text-center'>Login to your account</h5>
 				<br />
+				{errMessage}{serverErr}
 				<main className="pa2  mw6 center mt2 shadow-1 br3 sh">
 				  <form onSubmit={this.handleSubmit}>
 					<fieldset id="sign_up" className="ba b--transparent ph0 mh0">
 					 <div className="mt3">
 						<label className="fw6 lh-copy f6 font" htmlFor="email-address">Email</label>
-						<input onChange={this.handleInput}  className="pa2 input-reset ba bg-transparent   w-100" type="email" name="email"  id="email-address" value={email}/>
+						<input onFocus={this.focus} onChange={this.handleInput}  className={`${err} pa2 input-reset ba bg-transparent   w-100`} type="email" name="email"  id="email-address" value={email}/>
 					  </div>
 					  <div className="mt3">
 						<label className="fw6 lh-copy f6 font" htmlFor="Name">Password</label>
-						<input onChange={this.handleInput}  className="pa2 input-reset ba bg-transparent   w-100" type="password" name="password"  id="password" value={password} />
+						<input onFocus={this.focus} onChange={this.handleInput}  className={`${err} pa2 input-reset ba bg-transparent   w-100`} type="password" name="password"  id="password" value={password} />
 					  </div>
 
 					</fieldset>

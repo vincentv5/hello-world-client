@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Navigation from './Navigation';
 import Products from './Products/Products';
-import AdminProducts from './Admin/Product/Product';
+import AdminProducts from './Admin/Products';
 import AllCombined from './Payment/AllCombined';
 import Login from './Admin/Login';
 import Footer from './Footer';

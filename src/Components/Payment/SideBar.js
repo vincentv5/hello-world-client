@@ -56,9 +56,9 @@ return (
 	</header>
 	<article>
 	<br/>
-		<h5 className='tc' style={{fontWeight:'bold'}}>{`NGN ${state.total}`}</h5>
+		<h5 className='tc' style={{fontWeight:'bold'}}>{`NGN ${state.clientAmount}`}</h5>
 
-		<p className='tc'>{`(${state.numOfItems}`}<IoIosClose style={{fontSize:'13px',textAlign:'center',margin:'4px'}}/>{`${state.total})`}</p>
+		<p className='tc'>{`(${state.numOfItems}`}<IoIosClose style={{fontSize:'13px',textAlign:'center',margin:'4px'}}/>{`${state.clientAmount})`}</p>
 		<div>
 		<br />
 			{DanamicChange}	

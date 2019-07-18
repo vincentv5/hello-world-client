@@ -7,12 +7,14 @@ import { Update_panel, Delete_panel } from '../Store/Action';
 	constructor(props) {
  		super(props);
  		this.state={
- 			title:null,
- 			description:null,
- 			stock:null,
- 			price:null,
- 			image:null,
- 			id:null,
+ 			title:'',
+ 			description:'',
+ 			stock:'',
+ 			keys:'',
+ 			license:'',
+ 			price:'',
+ 			image:'',
+ 			id:'',
  			isDeleted:false,
  			error:false,
  			success:false
@@ -20,19 +22,24 @@ import { Update_panel, Delete_panel } from '../Store/Action';
  		}
  	}
 	 
-	 componentWillMount() {
+	 componentDidMount() {
+	 	//initializing  and getting values out of panel and updating the state
 	 	const panel =this.props.panel;
+	 	console.log(panel);
 	 	if(panel.length!== 0) {
 	 	const idx = this.props.match.params.id;
-	 	const results = panel.filter((val,i)=>val.id === idx );
-	 	const { title, description , stock ,price, image,id} = results[0]
+	 	const results = panel.filter((val,i)=>val._id === idx );
+	 	const { title, description , stock ,price, image,id,licensekey,_id} = results[0]
+	 	const keyToString = licensekey.toString();
 	 	this.setState({
 			title:title,
  			description:description,
  			stock:stock,
  			price:price,
  			image:image,
- 			id:id,
+ 			license:keyToString,
+ 			id:_id,
+ 			keys:licensekey,
 
 	 	})
 	 	}
@@ -40,55 +47,62 @@ import { Update_panel, Delete_panel } from '../Store/Action';
 	 }
  
 	handleSubmit=(e)=> {
+		// submiting update
 		e.preventDefault();
-		const {title,description,stock,price}=this.state;	
-		if(!title || !description || !stock || !price) {
-			this.setState({error:true,success:false,isDeleted:false});
-			return;
+		const {title,description,stock,price,keys,id}=this.state;	
+		console.log(title,description,keys);
+		if(!title || !description || !stock || !price || !keys || !id) {
+			return this.setState({error:false,success:false,isDeleted:false})
+
 		}
-		this.props.Update_panel(this.state);
+		
+		this.props.Update_panel({title,description,stock,price,keys,id})
+		.then(()=>{
+			return this.setState({error:false,success:true,isDeleted:false})
+		}).catch(()=>{
+			return this.setState({error:false,success:false,isDeleted:false})
+		});
 		this.setState({
 			title:'',
  			description:'',
  			stock:'',
  			price:'',
  			image:'',
+ 			keys:'',
+ 			license:'',
  			success:true,
  			error:false
 		});
-
+		window.scrollTo(0, 0);
 	}
 
 	handleInput=(e)=> {
-		this.setState({
+		if(e.target.name === 'license') {
+			const arr = e.target.value.split(/[\n\s]/gi);
+			this.setState({
+			[e.target.name]:e.target.value,
+			keys:arr
+			});
+
+		}else {
+			this.setState({
 			[e.target.name]:e.target.value
 		})
-	}
 
-	handleDelete=()=>{
-	const idx = this.props.match.params.id;
-	console.log('handle delete clicked', idx);
-	this.props.Delete_panel(idx);
-	this.setState({
-			title:'',
- 			description:'',
- 			stock:'',
- 			price:'',
- 			image:'',
- 			isDeleted:true,
- 
-		});
-
+		}
+		
 	}
 
 	focus=()=> {
+		//handling focus in and focus out
 		this.setState({error:false,success:false,isDeleted:false})
 	}
 
 	render() {
+		//errors , success setups
 		const error = this.state.error;
 		const isDeleted = this.state.isDeleted ?(<div className='col-sm-5 m-auto alert alert-success'>you have successfully deleted a package</div>):'' 
-		const {title,description,stock,price,image,id } = this.state;
+		const {title,description,stock,price,image,id,license } = this.state;
 		const err = error ? 'danger' : ''
 		const success = this.state.success?(<div className='col-sm-5 m-auto alert alert-success'>you have successfully updated a package</div>): '';
 		const errMessage = error ? (<div className='col-sm-5 m-auto alert alert-danger'>all fields are required</div>)  : ''
@@ -107,7 +121,7 @@ import { Update_panel, Delete_panel } from '../Store/Action';
 					<fieldset id="sign_up" className="ba b--transparent ph0 mh0">
 					 <div className="mt3">
 						<label className={` fw6 lh-copy f6 font`} htmlFor="email-address">Title</label>
-						<input onFocus={this.focus} onChange={this.handleInput}   className={`${err} pa2 input-reset ba bg-transparent   w-100`} type="text" name="title"  id="title"  value={title}/>
+						<input onFocus={this.focus} onChange={this.handleInput}   className={`${err} pa2 input-reset ba bg-transparent   w-100`} type="text" name="title"  id="title"  value={title} />
 					  </div>
 
 					  <div className="mt3">
@@ -130,9 +144,13 @@ import { Update_panel, Delete_panel } from '../Store/Action';
 						<input onFocus={this.focus} onChange={this.handleInput} className={`${err} pa2 input-reset ba bg-transparent   w-100`} type="file" name="image"  id="image" value={image} />
 					  </div>
 
+						<div className="mt3">
+						<label className="fw6 lh-copy f6 font" htmlFor="Name">licenseKeys</label>
+						<textarea onFocus={this.focus} onChange={this.handleInput} className={`${err} pa2 input-reset ba bg-transparent   w-100`} type="text" name="license"  id="license" value={license}/>
+					  </div>
+
 					  <div className="mt3">
-						
-						<input onFocus={this.focus} onChange={this.handleInput} className={`${err} pa2 input-reset ba bg-transparent   w-100`} type="hidden" name="id"  id="id" value={id}/>
+						<input className={`pa2 input-reset ba bg-transparent   w-100`} type="hidden" name="id" value={id}/>
 					  </div>
 
 					</fieldset>
@@ -140,7 +158,28 @@ import { Update_panel, Delete_panel } from '../Store/Action';
 					  <button style={{backgroundColor:'#1c2260',color:'white'}} className="btn form-control col-sm-12" type="submit">update</button> 
 					</div>
 				  </form>
-				   <button onClick={this.handleDelete} style={{color:'white',backgroundColor:'red'}} className="btn form-control col-sm-12">delete</button>
+				   <button onClick={
+				   	()=> {
+				   	console.log(id);
+				   	this.props.Delete_panel(id).then(()=> {
+				   		return this.setState({error:false,success:false,isDeleted:true})
+				   	}).catch(()=>{
+				   		return this.setState({error:false,success:false,isDeleted:false})
+				   	});
+				   	this.setState({
+					title:'',
+		 			description:'',
+		 			stock:'',
+		 			price:'',
+		 			image:'',
+		 			keys:'',
+		 			license:'',
+		 			success:true,
+		 			error:false
+				});
+				   	window.scrollTo(0, 0);
+				   }} style={{color:'white',backgroundColor:'red'}} className="btn form-control col-sm-12">delete</button>
+			
 			</main>
 			</div>
 		);

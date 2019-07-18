@@ -13,7 +13,7 @@ export class AllCombined extends Component {
 			email:'',
 			isSubmited:false,
 			numOfItems:1,
-			total:'200',
+			clientAmount:'200',
 			price:'200',
 			err:false,
 			description:'',
@@ -25,9 +25,9 @@ export class AllCombined extends Component {
 	componentDidMount() {
 			window.scrollTo(0, 0);
 			const id = this.props.match.params.id;
-			const card = this.props.panel.filter((val,i)=> val.id === id);
+			const card = this.props.panel.filter((val,i)=> val._id === id);
 			this.setState({
-				total:card[0].price,
+				clientAmount:card[0].price,
 				price:card[0].price,
 				description:card[0].description,
 				stock:card[0].stock
@@ -41,10 +41,10 @@ export class AllCombined extends Component {
 		handlePrice =(sign) => {
 			if(sign === '-') {
 			
-				this.setState({total:eval(`${this.state.total} - ${this.state.price}`)})
+				this.setState({clientAmount:eval(`${this.state.clientAmount} - ${this.state.price}`)})
 
 			}else if(sign === '*') {
-				this.setState({total:eval(`${this.state.total} + ${this.state.price}`)})
+				this.setState({clientAmount:eval(`${this.state.clientAmount} + ${this.state.price}`)})
 			}
 			
 		}
@@ -77,6 +77,7 @@ export class AllCombined extends Component {
 			this.setState({isSubmited:true})
 
 			}else if(email.match(regex)=== null) {
+				
 			this.setState({err:true});
 			}	
 		}

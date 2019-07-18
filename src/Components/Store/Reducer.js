@@ -1,4 +1,4 @@
-import { CREATE_PANEL,UPDATE_PANEL,DELETE_PANEL,LOGIN,LOGOUT} from './Constants';
+import { CREATE_PANEL,UPDATE_PANEL,DELETE_PANEL,LOGIN,LOGOUT,GETPANELS} from './Constants';
 
 const StoreRoom = {
 		isAuthenticated:false,
@@ -18,7 +18,7 @@ export default (state=StoreRoom, action)=> {
 
 		case UPDATE_PANEL:
 			let idx =null;
-			state.data.forEach((val,i)=>{if(val.id === action.payload.id) idx=i; return;})
+			state.data.forEach((val,i)=>{if(val._id === action.payload.id) idx=i; return;})
 			if(idx !== null)  state.data.splice(idx,1,action.payload);
 			return{...state,data:state.data} 
 			 break;
@@ -26,7 +26,7 @@ export default (state=StoreRoom, action)=> {
 
 		 case DELETE_PANEL:
 			let id =null;
-			state.data.forEach((val,i)=>{if(val.id === action.payload)id=i; return;});
+			state.data.forEach((val,i)=>{if(val._id === action.payload)id=i; return;});
 			if(id !== null) state.data.splice(id,1);
 			return {...state,data:state.data};
 			break;
@@ -36,11 +36,18 @@ export default (state=StoreRoom, action)=> {
 
 			return {
 				...state,
-				isAuthenticated:action.payload.email ? true:false ,
+				isAuthenticated:action.payload.body ? true:false ,
 				user:action.payload
 
 			}
 
+			break;
+
+			case GETPANELS:
+			return {
+				...state,
+				data:action.payload
+			}
 			break;
 
 
@@ -50,8 +57,9 @@ export default (state=StoreRoom, action)=> {
 				isAuthenticated:false,
 				user:{}
 			}
-
 			break;
+
+
 
 			default:
 			return state;

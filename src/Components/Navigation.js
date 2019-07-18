@@ -26,7 +26,7 @@ return (
 	   		{prod}
 	   		</NavItem>
 	   		<NavItem>
-	   			<Link style={{textDecoration:'none',color:'white',margin:'10px'}} onClick={()=>{
+	   			<Link style={{textDecoration:'none',color:'white',margin:'10px'}} to='' onClick={()=>{
 
 					props.Logout();
 					props.history.push('/admin');

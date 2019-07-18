@@ -1,4 +1,4 @@
-import { CREATE_PANEL,UPDATE_PANEL,DELETE_PANEL,LOGIN, LOGOUT} from './Constants';
+import { CREATE_PANEL,UPDATE_PANEL,DELETE_PANEL,LOGIN, LOGOUT,REGISTER,GETPANELS} from './Constants';
 
 export const login =(data)=> {
 	return {
@@ -8,6 +8,13 @@ export const login =(data)=> {
 
 }
 
+
+export const get_panels=(data)=> {
+	return {
+		type:GETPANELS,
+		payload:data,
+	}
+}
 export const create_panel =(data)=> {
 	return {
 		type:CREATE_PANEL,
@@ -36,6 +43,13 @@ export const delete_panel =(id)=> {
 export const logout=()=> {
 	return {
 		type:LOGOUT
+	}
+}
+
+export const register=(data)=> {
+	return {
+		type:REGISTER,
+		payload:data
 	}
 }
 
