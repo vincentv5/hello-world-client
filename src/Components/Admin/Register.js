@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import { withRouter,Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Login_user, Remember_token,  removeServerError } from '../Store/Action';
+import { Register_user,removeServerError} from '../Store/Action';
 import FaUser from 'react-icons/lib/fa/user';
 
-class Login extends Component {
+class Register extends Component {
  	constructor(props) {
  		super(props);
  		this.state={
@@ -12,8 +12,9 @@ class Login extends Component {
  			password:'',
  			error:false,
 			serverErr:false,
-			token:false,
-			success:false
+            token:false,
+            success:false
+        
  		}
  	}
 
@@ -23,32 +24,24 @@ class Login extends Component {
 		const { email, password} = this.state;
 		if(!email || !password) {
 			return this.setState({error:true,success:false,isDeleted:false});
-		}
-		removeServerError();
-		this.setState({
-			success:true,
-		})
-		this.props.Login_user({email,password}).then(()=>{
-			if(this.props.errorFromServer) {
-				return this.setState({error:false,serverErr:true});
-			}
-
-			if(this.state.token) {
-				Remember_token();
-			}
-			this.setState({error:false,isDeleted:false,success:false});
-			return this.props.history.push('/admin/products');
+        }
+        removeServerError();
+        this.setState({success:true});
+		this.props.Register_user({email,password}).then(()=>{
+            this.setState({success:false});
+            if(this.props.errorFromServer) {
+                return this.setState({error:false,serverErr:true});
+            }
+            this.setState({error:false,success:true,isDeleted:false});
+			return this.props.history.push('/admin');
 			
-		});
+		})
+			
+		
 		
 	}
 
-	handleToken=(e)=> {
-		if(e.target.checked === true) {
-			this.setState({token:true});
-		}
-		
-	}
+
 	handleInput=(e)=> {
 		this.setState({
 			[e.target.name]:e.target.value
@@ -56,7 +49,7 @@ class Login extends Component {
 	}	
 
 	focus=()=> {
-		this.setState({error:false,serverErr:false})
+		this.setState({error:false,success:false,isDeleted:false,serverErr:false})
 	}
 
 
@@ -69,9 +62,8 @@ class Login extends Component {
 		const error = this.state.error;
 		const err = error ? 'danger' : ''
 		const errMessage = error ? (<div className='col-sm-5 m-auto alert alert-danger tc'>all fields are required</div>)  : ''
-		const serverErr = this.state.serverErr ? (<div className='tc col-sm-5 m-auto alert alert-danger'>untrusted credentials!!</div>)  : ''
-		const isSuccess = this.state.success? true : false;
-
+        const serverErr = this.state.serverErr ? (<div className='tc col-sm-5 m-auto alert alert-danger'>{'Only administrator is allow !!'}</div>)  : '';
+        const isSuccess = this.state.success ? true : false;
 		return (
 			<div className='container main'>
 			<br />
@@ -94,28 +86,16 @@ class Login extends Component {
 
 					</fieldset>
 					<div>
-					  <button disabled={isSuccess} style={{backgroundColor:'#1c2260',color:'white'}} className=" btn form-control br4" type="submit">Login</button>
+					  <button disabled={isSuccess} style={{backgroundColor:'#1c2260',color:'white'}} className=" btn form-control br4" type="submit">Register</button>
 					</div>
 				  </form>
-				  <br />
-				  <input onClick={this.handleToken} type='checkbox' /> Remember me token
-				  <p>
-					  <Link 
-					  style={{textDecoration:"none"}} 
-					  to='/register'>SignUp
-					  </Link> if you are not register  or 
-					  <Link 
-					  style={{textDecoration:"none"}} 
-					  to='/forgetpassword'> forget password
-					  </Link>
-					  </p>
-				 
+				  
 			</main>
+
 			</div>
 		);
 	}
 }
-
 
 const mapStateToProps=(state)=> {
 return {
@@ -124,4 +104,5 @@ return {
 }
 
 
-export default withRouter(connect(mapStateToProps,{Login_user}) (Login));
+
+export default withRouter(connect(mapStateToProps,{Register_user}) (Register));

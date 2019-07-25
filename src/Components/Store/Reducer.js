@@ -4,6 +4,7 @@ const StoreRoom = {
 		isAuthenticated:false,
 		user:{},
 		data:[],
+		isError:false
 }
 
 export default (state=StoreRoom, action)=> {
@@ -59,7 +60,19 @@ export default (state=StoreRoom, action)=> {
 			}
 			break;
 
+			case 'ERROR':
+				return {
+					...state,
+					isError:action.message
+				}
+				break;
 
+				case 'REMOVE_ERROR':
+					return {
+						...state,
+						isError:false
+					}
+					break;
 
 			default:
 			return state;

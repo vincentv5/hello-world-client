@@ -1,18 +1,46 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import {Navbar,NavbarBrand, Nav, NavItem, Container, } from 'reactstrap';
+import Spinner from '../Spinner';
+import { connect } from 'react-redux';
 import Card from  './Card';
+import { Get_panels } from '../Store/Action';
 
-const Products = () => {
+class Products extends Component {
+	constructor(props) {
+		super(props);
+		this.state={
+			loading:true
+		}
+	}
+
+	componentDidMount() {
+		this.props.Get_panels().then(()=> {
+			this.setState({
+				loading:false
+			})
+		});
+	}
+
+
+render() {
+const isCard = this.state.loading ? (<Spinner loading={this.state.loading}/>):(<Card {...this.props}/>);
  return (
-	<div className="">
+	<div>
 		<div className="Container main">
 			<div className="styling1 mt5">
-				<Card />
+				{isCard}
 			</div>
 		</div>
 
 	</div>
 	)
+	}
 }
-export default Products;
+
+const mapStateToProps=(state)=> {
+	return {
+		panel:state.data
+	}
+}
+
+export default connect(mapStateToProps,{Get_panels})(Products);

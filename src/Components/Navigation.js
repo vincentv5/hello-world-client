@@ -1,13 +1,16 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import MdEject from 'react-icons/lib/md/eject';
+import FaPlus from 'react-icons/lib/fa/plus';
+import MdEllipsisMenu from 'react-icons/lib/md/keyboard-control';
 import {Navbar,NavbarBrand,NavItem, Container,NavbarToggler,Collapse,Nav } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Logout } from './Store/Action';
 const Navigation = (props) => {
-const style={backgroundColor:'#1c2260',color:'white',margin:'10px',textDecoration:'none'};
-const add = props.auth ? 'Create' : '';
-const prod = props.auth ?(<Link to='/admin/products'  style={style}>Products</Link>): '';
-const logout = props.auth? 'Logout': '';
+const style={backgroundColor:'#1c2260',marginLeft:'15px',color:'white',fontSize:'20px',fontWeight:'bold',textDecoration:'none'};
+const add = props.auth ? (<FaPlus />) : '';
+const prod = props.auth ?(<Link to='/admin/products'  style={style}><MdEllipsisMenu /></Link>): '';
+const logout = props.auth? (<MdEject />): '';
 
 return (
 	<React.Fragment>
@@ -18,7 +21,7 @@ return (
 	   		<Container style={{marginLeft:'80%'}}>
             <Nav navbar>
 	   		<NavItem>
-	   			<Link to='/admin/add' style={{textDecoration:'none',color:'white',margin:'10px'}}>
+	   			<Link to='/admin/add' style={{marginLeft:'15px',textDecoration:'none',color:'white',fontSize:'20px',fontWeight:'bold'}}>
 	   				{add}
 	   			</Link>
 	   		</NavItem>
@@ -26,14 +29,13 @@ return (
 	   		{prod}
 	   		</NavItem>
 	   		<NavItem>
-	   			<Link style={{textDecoration:'none',color:'white',margin:'10px'}} to='' onClick={()=>{
-
+	   			<p className='pointer' style={{marginLeft:'15px',textDecoration:'none',color:'white',fontSize:'20px',fontWeight:'bold'}} onClick={()=>{
 					props.Logout();
 					props.history.push('/admin');
 
 	   			}}>
 	   				{logout}
-	   			</Link>
+	   			</p>
 	   		</NavItem> 
 			 </Nav>
 			 </Container>

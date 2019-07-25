@@ -1,12 +1,12 @@
-import { createStore, applyMiddleware ,compose} from 'redux';
+import {compose, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import reducer from './Reducer';
-
 const store =createStore(
-	reducer,
-	applyMiddleware(thunk),
-	compose(
-		Window._DEVTOOLS_EXTENSION_&&Window._DEVTOOLS_EXTENSION_()
+		reducer,
+		compose(
+			applyMiddleware(thunk),
+			window.devToolsExtension ? window.devToolsExtension() :
+			f=>f
 		)
 	);
 

@@ -3,9 +3,9 @@ import Details from './Details';
 import Payment from './Payment';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { Get_panels } from '../Store/Action';
 
 export class AllCombined extends Component {
-
 	constructor(props){
 		super(props);
 		this.state={
@@ -13,52 +13,69 @@ export class AllCombined extends Component {
 			email:'',
 			isSubmited:false,
 			numOfItems:1,
-			clientAmount:'200',
-			price:'200',
+			clientAmount:0,
+			price:0,
 			err:false,
 			description:'',
-			stock:''	
+			stock:0	
 		}
 	}
 
 
 	componentDidMount() {
-			window.scrollTo(0, 0);
+		window.scrollTo(0, 0);
+		this.props.Get_panels().then(()=>{
 			const id = this.props.match.params.id;
+			console.log(id);
 			const card = this.props.panel.filter((val,i)=> val._id === id);
+			console.log(card);
 			this.setState({
 				clientAmount:card[0].price,
 				price:card[0].price,
 				description:card[0].description,
-				stock:card[0].stock
+				stock:card[0].stock-this.state.numOfItems
 			})
-
-
+		});
 
 
 		}
 		
 		handlePrice =(sign) => {
 			if(sign === '-') {
-			
-				this.setState({clientAmount:eval(`${this.state.clientAmount} - ${this.state.price}`)})
+				this.setState({
+					clientAmount:this.state.clientAmount -= this.state.price,
+					stock:++this.state.stock
+				})
 
 			}else if(sign === '*') {
-				this.setState({clientAmount:eval(`${this.state.clientAmount} + ${this.state.price}`)})
+				this.setState({
+					clientAmount:this.state.clientAmount += this.state.price,
+					stock:--this.state.stock
+				})
+				
+
+				
+
+				
+				
 			}
 			
 		}
 
 		handleMinus=()=> {
 			if(this.state.numOfItems !== 1) {
-			this.setState({numOfItems: --this.state.numOfItems});
-				this.handlePrice('-');
+				this.setState({numOfItems: --this.state.numOfItems});
+				this.handlePrice('-');	
 			}
+			
 		}
 		
 		handlePlus =()=> {
+			if(this.state.stock >0){
 			this.setState({numOfItems: ++ this.state.numOfItems});
 			this.handlePrice('*');
+			}
+			
 		}
 		
 
@@ -87,7 +104,7 @@ export class AllCombined extends Component {
 		}
 
 		handlefocus=()=> {
-			this.setState({err:false});
+		this.setState({err:false});
 		}
 
 
@@ -119,4 +136,4 @@ return {
 }
 }
 
-export default withRouter(connect(mapStateToProps,null)(AllCombined));
+export default withRouter(connect(mapStateToProps,{Get_panels})(AllCombined));
