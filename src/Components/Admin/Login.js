@@ -29,6 +29,10 @@ class Login extends Component {
 			success:true,
 		})
 		this.props.Login_user({email,password}).then(()=>{
+			this.setState({
+				success:false,
+			})
+			
 			if(this.props.errorFromServer) {
 				return this.setState({error:false,serverErr:true});
 			}

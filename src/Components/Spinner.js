@@ -1,6 +1,5 @@
 import React from 'react';
 import { css } from '@emotion/core';
-// First way to import
 import { ClipLoader } from 'react-spinners';
 const override = css`
     display: block;
@@ -9,12 +8,15 @@ const override = css`
 `;
  
 const Spinner=(props)=> {
+  const {size}=props;
     return (
       <div className='sweet-loading m-auto'>
+      <br/>
+      <br/>
         <ClipLoader
           css={override}
           sizeUnit={"px"}
-          size={60}
+          size={size}
           color={'#123abc'}
           loading={props.loading}
         />

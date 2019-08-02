@@ -5,4 +5,5 @@ export const LOGIN ='LOGIN';
 export const LOGOUT ='LOGOUT';
 export const REGISTER = "REGISTER";
 export const GETPANELS='GETPANELS';
+export const CREATE_CHARGE='CREATE_CHARGE';
 

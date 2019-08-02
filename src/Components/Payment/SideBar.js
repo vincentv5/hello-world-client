@@ -4,50 +4,11 @@ import FaAngleRight from 'react-icons/lib/fa/angle-right';
 import IoIosClose from 'react-icons/lib/io/close';
 import FaPlus from 'react-icons/lib/fa/plus';
 import FaMinus from 'react-icons/lib/fa/minus';
+import FaDollarSign from 'react-icons/lib/fa/dollar';
+
 
 
  const SideBar =(props)=> {
- 		const alertMessage = props.state.err? {border:'2px solid red'} : {border:''};
-		const {handlefocus,moveBack, submitEmail,handleChange,handleInput,state,handleMinus,handlePlus } = props;
-		const stock ={borderRadius:'100%',width:'18px',height:'18px',border:'2px solid pink',marginRight:'2px'};
-		const spanDiv ={borderRadius:'2px',display:'flex',flexDirection:'row',padding:'3px',backgroundColor:'#1c2260'};
-		const spanMinus = {fontSize:'20px',fontWeight:'bold',margin:'4px',padding:'4px'};
-		const spanPlus ={fontSize:'20px',fontWeight:'bold',margin:'4px',padding:'4px'};
-		const span2={marginLeft:'70%',padding:'2px',fontWeight:'bold',fontSize:'20px',color:'white'};
-		const span1={marginLeft:'7%',padding:'2px',fontWeight:'bold',fontSize:'20px',color:'white'};
-		const DanamicChange =state.toggle ? (<button onClick={handleChange} className='btn form-control' style={{backgroundColor:'#1c2260',color:'white'}}>
-		purchase
-		</button>):(
-		<div>
-		<label htmlFor ='email'>Email address</label>
-		<input 
-		onFocus ={handlefocus} 
-		style={alertMessage} 
-		onChange={handleInput} 
-		type='email' 
-		className='form-control' 
-		placeholder='email address'
-		/>
-
-		<div style={spanDiv}>
-		<span 
-		style={span1} 
-		className='pointer tc' 
-		onClick={moveBack}>
-		<FaAngleLeft />
-		</span>
-
-		<span 
-		style={span2} 
-		className='pointer tc' 
-		onClick={submitEmail}>
-		<FaAngleRight />
-		</span>
-
-		</div>
-		</div>
-		)
-
 return (
 
 <div className='col-sm-3'>
@@ -56,19 +17,22 @@ return (
 	</header>
 	<article>
 	<br/>
-		<h5 className='tc' style={{fontWeight:'bold'}}>{`NGN ${state.clientAmount}`}</h5>
-
-		<p className='tc'>{`(${state.numOfItems}`}<IoIosClose style={{fontSize:'13px',textAlign:'center',margin:'4px'}}/>{`${state.clientAmount})`}</p>
+		<h5 className='tc' 
+		style={{fontWeight:'bold',color:"#1c2260"}}>
+		<FaDollarSign 
+		style={{fontSize:'18',marginBottom:"5px"}}/>
+		{`${props.state.clientAmount}`}</h5>
+		<p className='tc'>{`(${props.state.numOfItems}`}<IoIosClose style={{fontSize:'13px',textAlign:'center',margin:'4px'}}/>{`${props.state.clientAmount})`}</p>
 		<div>
 		<br />
-			{DanamicChange}	
+			{props.handleDanamic()}	
 		</div>
 		<br />
 
 		<div className='tc'>
-			<FaMinus style={spanMinus} className='pointer' onClick={handleMinus}/>
-				{state.numOfItems}
-			<FaPlus style={spanPlus} className='pointer' onClick={handlePlus}/>
+			<FaMinus style={props.spanMinus} className='pointer' onClick={props.handleMinus}/>
+				{props.state.numOfItems}
+			<FaPlus style={props.spanPlus} className='pointer' onClick={props.handlePlus}/>
 		</div>
 
 		<br />
@@ -81,9 +45,9 @@ return (
 		<div style={{display:'flex',flexDirection:'row'}}>
 			<p style={{flex:'1',marginLeft:'5px'}}>Stock</p>
 			<div style={{marginRight:'5px', display:'flex',flexDirection:'row'}}>
-			<div style={stock}></div>
+			<div style={props.stock}></div>
 
-			<span >{state.stock}</span>
+			<span >{props.state.stock}</span>
 
 			</div>
 		</div>	

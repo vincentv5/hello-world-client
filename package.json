@@ -8,6 +8,7 @@
     "jwt-decode": "^2.2.0",
     "mdbreact": "^4.17.0",
     "react": "^16.8.6",
+    "react-coinbase-commerce": "^1.4.0",
     "react-confirm-alert": "^2.4.1",
     "react-dom": "^16.8.6",
     "react-icons": "^2.2.5",

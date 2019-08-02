@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import Navigation from './Navigation';
 import Products from './Products/Products';
 import AdminProducts from './Admin/Products';
-import AllCombined from './Payment/AllCombined';
+import Details from './Payment/Details';
+import Payment from './Payment/Payment';
+import Paypal from './Payment/Paypal';
 import Login from './Admin/Login';
 import Register from './Admin/Register';
 import Footer from './Footer';
@@ -14,7 +16,8 @@ import '../index.css';
 import { Get_panels} from './Store/Action';
 import Contact from './Contact';
 import { connect } from 'react-redux';
-import slug from 'slug';
+import Upload from './Admin/Upload';
+
 class Layout extends Component {
 	constructor() {
 		super()
@@ -41,7 +44,9 @@ class Layout extends Component {
 				<Navigation  toggleNavbar={this.toggleNavbar} collapsed={this.state.collapsed}/>
 				<Switch>
 				<Route exact path='/' component={Products} />
-				<Route  path='/purchase/:id' component={AllCombined } />
+				<Route  path='/purchase/:id' component={Details} />
+				<Route  path='/purchase' component={Payment} />
+				<Route  path='/paypal/purchase' component={Paypal} />
 				<Route  path='/admin/products' component={IsAthenticated(AdminProducts)} />
 				<Route  path='/admin/add' component={IsAthenticated(AddProduct)} />
 				<Route  path='/admin/:id/edit' component={IsAthenticated(Edit)} />

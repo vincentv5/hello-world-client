@@ -1,4 +1,4 @@
-import { CREATE_PANEL,UPDATE_PANEL,DELETE_PANEL,LOGIN, LOGOUT,REGISTER,GETPANELS} from './Constants';
+import {CREATE_CHARGE, CREATE_PANEL,UPDATE_PANEL,DELETE_PANEL,LOGIN, LOGOUT,REGISTER,GETPANELS} from './Constants';
 
 export const login =(data)=> {
 	return {
@@ -54,3 +54,10 @@ export const register=(data)=> {
 }
 
 
+export const coinbase =(data)=> {
+	console.log(data);
+	return {
+		type:CREATE_CHARGE,
+		data
+	}
+}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Create_panel,removeServerError } from '../Store/Action';
 import AddForm from './AddForm';
+import { SideNav } from './SideNav';
 
  class AddProduct extends Component {
 	constructor(props) {
@@ -11,12 +12,13 @@ import AddForm from './AddForm';
  			description:'',
  			stock:'',
  			price:'',
- 			image:'',
+ 			image:null,
  			license:'',
  			keys:'',
  			error:false,
 			success:false,
-			serverError:false
+			serverError:false,
+
  		
  		}
  	}
@@ -25,12 +27,15 @@ import AddForm from './AddForm';
 	handleSubmit=(e)=> {
 		e.preventDefault();
 		window.scrollTo(0, 0);
-		const {title,description,stock,price,keys,image}=this.state;
+		 const formData = new FormData();
+		 formData.append('file',this.state.image);
+        
+		const {title,description,stock,price,keys}=this.state;
 		if(!title || !description || !stock || !price || !keys) {
 			return this.setState({error:true,success:false});	
 		}
 		removeServerError();
-		this.props.Create_panel({title,description,stock,price,keys,image}).then(()=>{
+		this.props.Create_panel({title,description,stock,price,keys,formData}).then(()=>{
 			if(this.props.errorFromServer){
 				return this.setState({
 					success:false,
@@ -58,11 +63,9 @@ import AddForm from './AddForm';
 	handleInput=(e)=> {
 		if(e.target.name === 'license') {
 				const arr = e.target.value.split(/[\n\s]/gi);
-				console.log(arr);
 				this.setState({
 				keys:arr,
-				[e.target.name]:e.target.value
-			
+				[e.target.name]:e.target.value,
 				})
 			}else {
 				this.setState({
@@ -72,6 +75,14 @@ import AddForm from './AddForm';
 			}
 		
 	}	
+
+
+	handleImage=(e)=> {
+		this.setState({
+			image:e.target.files[0],
+		})
+		
+	}
 
 	focus=()=> {
 		this.setState({error:false,success:false,serverError:false})
@@ -88,6 +99,9 @@ import AddForm from './AddForm';
 		const errMessage = error ? (<div className='col-sm-5 m-auto alert alert-danger tc'>all fields are required</div>)  : '';
 		const serverErr = this.state.serverError ? (<div className=' tc col-sm-5 m-auto alert alert-danger'>ooopss something went wrong adding package ..</div>)  : ''
 		return (
+			<div style={{display:'flex'}}>
+			<SideNav />
+			<div style={{flex:'1'}}>
 			<AddForm 
 				handleInput={this.handleInput}
 				handleSubmit={this.handleSubmit}
@@ -99,7 +113,10 @@ import AddForm from './AddForm';
 				errMessage={errMessage}
 				handleFocus={this.focus}
 				serverErr={serverErr}
+				handleImage={this.handleImage}
 			/>
+			</div>
+			</div>
 		);
 	}
 }

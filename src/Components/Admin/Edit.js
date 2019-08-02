@@ -3,6 +3,7 @@ import {withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
 import { confirmAlert } from 'react-confirm-alert'; 
+import {SideNav }from './SideNav';
 import { Update_panel, Delete_panel, removeServerError } from '../Store/Action';
 import EditForm from './EditForm';
  class Edit extends Component {
@@ -205,6 +206,9 @@ import EditForm from './EditForm';
 		const errMessage = error ? (<div className='col-sm-5 m-auto alert alert-danger'>all fields are required</div>)  : '';
 		const serverErr = this.state.serverError ? (<div className='col-sm-5 m-auto alert alert-danger tc'>{'oopss something went wrong performing this task !'}</div>)  : ''
 		return (
+		<div style={{display:'flex'}}>
+		<SideNav />
+		<div style={{flex:'1'}}>
 			<EditForm 
 					handleDelete={this.handleDelete}
 					handleInput={this.handleInput}
@@ -219,6 +223,8 @@ import EditForm from './EditForm';
 					success={success}
 					serverErr={serverErr}
 			/>
+			</div>
+			</div>
 		);
 	}
 }

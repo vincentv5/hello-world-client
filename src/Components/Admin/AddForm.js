@@ -1,6 +1,6 @@
 import React from 'react';
 const AddForm=(props)=>{
-	const {serverErr,handleFocus, handleInput, handleSubmit,state,error,label,errMessage,err,success,focus} = props;
+	const {handleImage,serverErr,handleFocus, handleInput, handleSubmit,state,error,label,errMessage,err,success,focus} = props;
 	const {title,description,stock,price,image,id ,license}=state;
 		return (
 			<div>
@@ -10,7 +10,7 @@ const AddForm=(props)=>{
 			<header className='sidebar-header mw7 br2'>
 				<h6 className='ml2' style={{color:'white'}}>Add new package</h6>
 			</header>
-				  <form className='br2 shadow-2'  onSubmit={handleSubmit} style={{backgroundColor:'#F8F8F8'}}>
+				  <form  multiple className='br2 shadow-2'  onSubmit={handleSubmit} style={{backgroundColor:'#F8F8F8'}}>
 					<fieldset id="sign_up" className="ba b--transparent ph0 mh0">
 					 <div className="mt3">
 						<label style={label} className="fw6 lh-copy f6 font" htmlFor="email-address">Title</label>
@@ -33,7 +33,7 @@ const AddForm=(props)=>{
 
 					   <div className="mt3">
 						<label style={label} className="fw6 lh-copy f6 font" htmlFor="Name">Image</label>
-						<input onFocus={handleFocus} onChange={handleInput} className={`${err} br3 pa2 input-reset ba bg-transparent   w-100`} type="file" name="image"  id="image" value={image} />
+						<input onFocus={handleFocus} onChange={handleImage} className={`${err} br3 pa2 input-reset ba bg-transparent   w-100`} type="file" name="image"  id="image" />
 					  </div>
 
 					  <div className="mt3">

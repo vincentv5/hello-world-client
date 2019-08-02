@@ -1,38 +1,40 @@
 import React, { Component } from 'react';
-import PaystackButton from 'react-paystack';
+import { connect } from 'react-redux';
+import Coinbase from './Coinbase';
+import Spinner from '../Spinner';
+const Payment=(props)=> {
+	const title = props.isCoinbase?props.coinbaseInfo.name:'';
+	
+	const content = props.isCoinbase
+	?(<Coinbase/>)
+	:props.isError
+	?(<p className='tc alert alert-danger'>ooops something went wrong trying to create a charge!!!<br/> please try again !</p>)
+	:(<Spinner size={30}/>);
 
-export class Payment extends Component {
-
-constructor(props) {
- 		super(props)
-
- 		
- 	}
- 
-	render() {
-		const {email, total} = this.props;
 		return (
-			<div className='container main'>
-			<div className='col-sm-6 m-auto'>
+			<div className=' main shadow-2' style={{backgroundColor:"#F8F8F8"}}>
+			<div className='col-sm-7 m-auto'>
 			<br />
-				<header className='details-header'>
-					<h6 className='ml3' style={{color:'white'}}>Enter card details below </h6>
+				<header className='details-header br2'>
+					<h6 className='ml3' style={{color:'white'}}>
+					{title}
+					</h6>
 				</header>
-				<article >
-					<br />
-				<p>payment goes here</p>
-				</article>
+					{content}
 			</div>
 			</div>
 		);
 	}
+
+
+const mapStateToProps =(state)=> {
+	return {
+		coinbaseInfo:state.coinbase,
+		isCoinbase:state.isCoinbase,
+		isError:state.isError
+	}
+
 }
-
-export default Payment;
-
-
-
-
-
+export default connect(mapStateToProps,null)(Payment);
 
 

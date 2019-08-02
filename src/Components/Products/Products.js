@@ -21,12 +21,12 @@ class Products extends Component {
 		});
 	}
 	render() {
-		const isCard = this.state.loading?(<Spinner loading={this.state.loading}/>):(<Cards {...this.props}/>);
+		const isCard = this.state.loading?(<Spinner loading={this.state.loading} size={60}/>):(<Cards {...this.props}/>);
 		return (
 			<div className="">
 				<Header />
 				<div className="Container main">
-					<div className="styling1 mt5">
+					<div className="styling2 mt5">
 						{isCard}
 					</div>
 				</div>

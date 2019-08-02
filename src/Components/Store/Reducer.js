@@ -1,10 +1,13 @@
-import { CREATE_PANEL,UPDATE_PANEL,DELETE_PANEL,LOGIN,LOGOUT,GETPANELS} from './Constants';
+import {CREATE_CHARGE, CREATE_PANEL,UPDATE_PANEL,DELETE_PANEL,LOGIN,LOGOUT,GETPANELS} from './Constants';
 
 const StoreRoom = {
 		isAuthenticated:false,
 		user:{},
 		data:[],
-		isError:false
+		isError:false,
+		isCoinbase:false,
+		coinbase:null,
+		isCrypto:null,
 }
 
 export default (state=StoreRoom, action)=> {
@@ -71,6 +74,26 @@ export default (state=StoreRoom, action)=> {
 					return {
 						...state,
 						isError:false
+					}
+					break;
+
+					case CREATE_CHARGE:
+					return {
+						...state,
+						isCoinbase:true,
+						coinbase:action.data.results,
+						isCrypto:action.data.isCrypto
+
+					}
+
+					break;
+
+					case 'UNMOUNTED':
+						return {
+						...state,
+						isCoinbase:false,
+						coinbase:null,
+						isCrypto:null
 					}
 					break;
 
