@@ -1,4 +1,17 @@
-import {CREATE_CHARGE, CREATE_PANEL,UPDATE_PANEL,DELETE_PANEL,LOGIN, LOGOUT,REGISTER,GETPANELS} from './Constants';
+import {
+	FEEDBACK,
+	CONTACT,
+	GET_CONTACT,
+	GET_FEEDBACK,
+	CREATE_CHARGE, 
+	CREATE_PANEL,
+	UPDATE_PANEL,
+	DELETE_PANEL,
+	LOGIN, 
+	LOGOUT,
+	REGISTER,
+	GETPANELS
+} from './Constants';
 
 export const login =(data)=> {
 	return {
@@ -60,4 +73,33 @@ export const coinbase =(data)=> {
 		type:CREATE_CHARGE,
 		data
 	}
+}
+
+export const contact_us=(data)=> {
+	return {
+		type:CONTACT,
+		data
+	}
+}
+
+export const send_feedback=(data)=>{
+	return {
+		type:FEEDBACK,
+		data
+	}
+}
+
+export const get_feedbacks=(data)=> {
+	return {
+		type:GET_FEEDBACK,
+		data
+	}
+}
+
+export const get_contacts=(data)=> {
+	return {
+		type:GET_CONTACT,
+		data
+	}
+
 }

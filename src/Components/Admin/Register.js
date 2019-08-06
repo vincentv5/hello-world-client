@@ -23,16 +23,16 @@ class Register extends Component {
 		e.preventDefault();
 		const { email, password} = this.state;
 		if(!email || !password) {
-			return this.setState({error:true,success:false,isDeleted:false});
+			return this.setState({...this.state,error:true,success:false,isDeleted:false});
         }
         removeServerError();
         this.setState({success:true});
 		this.props.Register_user({email,password}).then(()=>{
-            this.setState({success:false});
+            this.setState({...this.state,success:false});
             if(this.props.errorFromServer) {
-                return this.setState({error:false,serverErr:true});
+                return this.setState({...this.state,error:false,serverErr:true});
             }
-            this.setState({error:false,success:true,isDeleted:false});
+            this.setState({...this.state,error:false,success:true,isDeleted:false});
 			return this.props.history.push('/admin');
 			
 		})
@@ -44,12 +44,13 @@ class Register extends Component {
 
 	handleInput=(e)=> {
 		this.setState({
+			...this.state,
 			[e.target.name]:e.target.value
 		})
 	}	
 
 	focus=()=> {
-		this.setState({error:false,success:false,isDeleted:false,serverErr:false})
+		this.setState({...this.state,error:false,success:false,isDeleted:false,serverErr:false})
 	}
 
 

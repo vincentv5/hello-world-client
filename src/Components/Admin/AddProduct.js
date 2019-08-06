@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Create_panel,removeServerError } from '../Store/Action';
+import { Create_panel,removeServerError,getUploads} from '../Store/Action';
 import AddForm from './AddForm';
 import { SideNav } from './SideNav';
 
- class AddProduct extends Component {
+class AddProduct extends Component {
 	constructor(props) {
  		super(props);
  		this.state={
@@ -18,26 +18,40 @@ import { SideNav } from './SideNav';
  			error:false,
 			success:false,
 			serverError:false,
-
- 		
+			isImage:false,
+			file:null,
+			dropdownOpen: false
  		}
  	}
+
+		componentDidMount() {
+			 this.props.getUploads().then(()=> {
+               this.setState({...this.state,isImage:true}); 
+            })
+		}
+
+
+  toggle=()=>{
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen
+    }));
+  }
+
+
 
 
 	handleSubmit=(e)=> {
 		e.preventDefault();
-		window.scrollTo(0, 0);
-		 const formData = new FormData();
-		 formData.append('file',this.state.image);
-        
-		const {title,description,stock,price,keys}=this.state;
+		window.scrollTo(0, 0); 
+		const {title,description,stock,price,keys,file}=this.state;
 		if(!title || !description || !stock || !price || !keys) {
-			return this.setState({error:true,success:false});	
+			return this.setState({...this.state,error:true,success:false});	
 		}
 		removeServerError();
-		this.props.Create_panel({title,description,stock,price,keys,formData}).then(()=>{
+		this.props.Create_panel({title,description,stock,price,keys,file}).then(()=>{
 			if(this.props.errorFromServer){
 				return this.setState({
+					...this.state,
 					success:false,
 					error:false,
 					serverError:true
@@ -64,11 +78,13 @@ import { SideNav } from './SideNav';
 		if(e.target.name === 'license') {
 				const arr = e.target.value.split(/[\n\s]/gi);
 				this.setState({
+				...this.state,
 				keys:arr,
 				[e.target.name]:e.target.value,
 				})
 			}else {
 				this.setState({
+					...this.state,
 					[e.target.name]:e.target.value
 				})
 				
@@ -76,16 +92,24 @@ import { SideNav } from './SideNav';
 		
 	}	
 
+	selectInput=(e)=> {
+		this.setState({
+			...this.state,
+			file:e.target.src
+		})
+	}
+
 
 	handleImage=(e)=> {
 		this.setState({
+			...this.state,
 			image:e.target.files[0],
 		})
 		
 	}
 
 	focus=()=> {
-		this.setState({error:false,success:false,serverError:false})
+		this.setState({...this.state,error:false,success:false,serverError:false})
 	}
 	render() {
 		const label ={
@@ -93,6 +117,7 @@ import { SideNav } from './SideNav';
 			fontSize:"15px",
 			marginLeft:"5px"
 		}
+
 		const error = this.state.error;
 		const err = error ? 'danger' : ''
 		const success = this.state.success?(<div className='col-sm-5 m-auto alert alert-success tc'>you have successfully added a package</div>): '';
@@ -114,6 +139,11 @@ import { SideNav } from './SideNav';
 				handleFocus={this.focus}
 				serverErr={serverErr}
 				handleImage={this.handleImage}
+				Images={this.props.images}
+				isImage={this.state.isImage}
+				selectInput={this.selectInput}
+				toggle={this.toggle}
+				dropdownOpen={this.state.dropdownOpen}
 			/>
 			</div>
 			</div>
@@ -124,8 +154,9 @@ import { SideNav } from './SideNav';
 const mapStateToProps=(state)=> {
 
 	return {
-		errorFromServer:state.isError
+		errorFromServer:state.isError,
+		images:state.uploadedFiles
 	}
 }
 
-export default connect(mapStateToProps,{Create_panel})(AddProduct);
+export default connect(mapStateToProps,{Create_panel,getUploads})(AddProduct);

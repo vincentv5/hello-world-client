@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import 'react-confirm-alert/src/react-confirm-alert.css'; 
 import { confirmAlert } from 'react-confirm-alert'; 
 import {SideNav }from './SideNav';
-import { Update_panel, Delete_panel, removeServerError } from '../Store/Action';
+import { Update_panel, Delete_panel, removeServerError,getUploads} from '../Store/Action';
 import EditForm from './EditForm';
  class Edit extends Component {
 	constructor(props) {
@@ -16,24 +16,28 @@ import EditForm from './EditForm';
  			keys:'',
  			license:'',
  			price:'',
- 			image:'',
  			id:'',
  			isDeleted:false,
  			error:false,
  			success:false,
- 			isClicked:false
+ 			isClicked:false,
+ 			file:'',
+ 			isImage:false,
+ 			dropdownOpen: false
  		
  		}
  	}
 	 
 	 componentDidMount() {
 	 	//initializing  and getting values out of panel and updating the state
+	 	  this.props.getUploads().then(()=> {
+               this.setState({...this.state,isImage:true}); 
+            });
 	 	const panel =this.props.panel;
-	 	console.log(panel);
 	 	if(panel.length!== 0) {
 	 	const idx = this.props.match.params.id;
 	 	const results = panel.filter((val,i)=>val._id === idx );
-	 	const { title, description , stock ,price, image,id,licensekey,_id} = results[0]
+	 	const {image, title, description , stock ,price,id,licensekey,_id} = results[0]
 	 	const keyToString = licensekey.toString();
 	 	this.setState({
 			title:title,
@@ -44,13 +48,19 @@ import EditForm from './EditForm';
  			license:keyToString,
  			id:_id,
  			keys:licensekey,
-
-
+ 			file:image
 	 	})
 	 	}
 	 		
 	 }
- 
+ 		
+ 	 toggle=()=>{
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen
+    }));
+  }
+
+
 	handleSubmit=(e)=> {
 		// submiting update
 		e.preventDefault();
@@ -64,15 +74,16 @@ import EditForm from './EditForm';
 		      onClick: () =>{
 				window.scrollTo(0, 0);
 			    this.setState({isClicked:true});
-			    const {title,description,stock,price,keys,id,image}=this.state; 
+			    const {title,description,stock,price,keys,id,file}=this.state; 
 			    if(!title || !description || !stock || !price || !keys || !id) {
 			       return this.setState({error:true,success:false,isDeleted:false,isClicked:false})   
 				}
 				removeServerError();
-			    this.props.Update_panel({title,description,stock,price,keys,image,id})
+			    this.props.Update_panel({title,description,stock,price,keys,file,id})
 			    .then(()=>{
 					if(this.props.errorFromServer) {
 						return this.setState({
+							...this.state,
 							success:false,
 							error:false,
 							serverError:true,
@@ -114,11 +125,13 @@ import EditForm from './EditForm';
 		if(e.target.name === 'license') {
 			const arr = e.target.value.split(/[\n\s]/gi);
 			this.setState({
+				...this.state,
 			[e.target.name]:e.target.value,
 			keys:arr
 			});
 		}else {
 			this.setState({
+				...this.state,
 			[e.target.name]:e.target.value
 		})
 
@@ -142,6 +155,7 @@ import EditForm from './EditForm';
 					   removeServerError();
 					if(this.props.errorFromServer) {
 						return this.setState({
+							...this.state,
 							success:false,
 							error:false,
 							serverError:true,
@@ -150,7 +164,7 @@ import EditForm from './EditForm';
 				   	this.setState({isClicked:true});
 					return this.props.Delete_panel(this.state.id).then(()=> {
 				   	this.setState({
-					title:'',
+						title:'',
 						description:'',
 						stock:'',
 						price:'',
@@ -172,22 +186,21 @@ import EditForm from './EditForm';
 		      }
 		    }
 		  ],
-});
+}); 
+}
 
 
+	selectInput=(e)=> {
+		this.setState({
+			...this.state,
+			file:e.target.src
+		})
+	}
 
-
-
-
-
-
-
-   
-  }
 
 	focus=()=> {
 		//handling focus in and focus out
-		this.setState({error:false,success:false,isDeleted:false,serverError:false})
+		this.setState({...this.state,error:false,success:false,isDeleted:false,serverError:false})
 	}
 
 	render() {
@@ -222,6 +235,11 @@ import EditForm from './EditForm';
 					label={label}
 					success={success}
 					serverErr={serverErr}
+					isImage={this.state.isImage}
+					Images={this.props.images}
+					selectInput={this.selectInput}
+					toggle={this.toggle}
+					dropdownOpen={this.state.dropdownOpen}
 			/>
 			</div>
 			</div>
@@ -231,8 +249,9 @@ import EditForm from './EditForm';
 function mapStateToProps(state){
 	return {
 		panel:state.data,
-		errorFromServer:state.isError
+		errorFromServer:state.isError,
+		images:state.uploadedFiles
 	}
 }
 
-export default withRouter(connect(mapStateToProps,{Update_panel,Delete_panel})(Edit));
+export default withRouter(connect(mapStateToProps,{Update_panel,Delete_panel,getUploads})(Edit));

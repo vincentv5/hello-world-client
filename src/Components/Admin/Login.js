@@ -22,25 +22,27 @@ class Login extends Component {
 		e.preventDefault();
 		const { email, password} = this.state;
 		if(!email || !password) {
-			return this.setState({error:true,success:false,isDeleted:false});
+			return this.setState({...this.state,error:true,success:false,isDeleted:false});
 		}
 		removeServerError();
 		this.setState({
+			...this.state,
 			success:true,
 		})
 		this.props.Login_user({email,password}).then(()=>{
 			this.setState({
+				...this.state,
 				success:false,
 			})
 			
 			if(this.props.errorFromServer) {
-				return this.setState({error:false,serverErr:true});
+				return this.setState({...this.state,error:false,serverErr:true});
 			}
 
 			if(this.state.token) {
 				Remember_token();
 			}
-			this.setState({error:false,isDeleted:false,success:false});
+			this.setState({...this.state,error:false,isDeleted:false,success:false});
 			return this.props.history.push('/admin/products');
 			
 		});
@@ -49,18 +51,19 @@ class Login extends Component {
 
 	handleToken=(e)=> {
 		if(e.target.checked === true) {
-			this.setState({token:true});
+			this.setState({...this.state,token:true});
 		}
 		
 	}
 	handleInput=(e)=> {
 		this.setState({
+			...this.state,
 			[e.target.name]:e.target.value
 		})
 	}	
 
 	focus=()=> {
-		this.setState({error:false,serverErr:false})
+		this.setState({...this.state,error:false,serverErr:false})
 	}
 
 

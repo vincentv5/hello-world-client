@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import SideBar from './SideBar';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Get_panels, CoinbaseApiCall } from '../Store/Action';
+import { Get_panels, CoinbaseApiCall,removeServerError,unmounted } from '../Store/Action';
 import Cryptos from './Cryptos';
 import FaAngleLeft from 'react-icons/lib/fa/angle-left';
 import FaAngleRight from 'react-icons/lib/fa/angle-right';	
@@ -31,6 +31,7 @@ constructor(props){
 			const id = this.props.match.params.id;
 			const card = this.props.panel.filter((val,i)=> val._id === id);
 			this.setState({
+				...this.state,
 				clientAmount:card[0].price,
 				price:card[0].price,
 				description:card[0].description,
@@ -42,16 +43,20 @@ constructor(props){
 		
 		handlePrice =(sign) => {
 			if(sign === '-') {
-				this.setState({
-					clientAmount:this.state.clientAmount -= this.state.price,
-					stock:++this.state.stock
-				})
+				// const cAmount =this.state.clientAmount -= this.state.price;
+				// const theStock =++this.state.stock;
+					this.setState(prevState => ({
+	      			clientAmount:prevState.clientAmount-= this.state.price,
+	      			stock:++prevState.stock
+	   			 }));
 
 			}else if(sign === '*') {
-				this.setState({
-					clientAmount:this.state.clientAmount += this.state.price,
-					stock:--this.state.stock
-				})
+				// const cAmount=this.state.clientAmount += this.state.price;
+				// const theStock = --this.state.stock;
+					this.setState(prevState => ({
+	      			clientAmount:prevState.clientAmount+= this.state.price,
+	      			stock:--prevState.stock
+	   			 }));
 	
 			}
 			
@@ -59,15 +64,21 @@ constructor(props){
 
 		handleMinus=()=> {
 			if(this.state.numOfItems !== 1) {
-				this.setState({numOfItems: --this.state.numOfItems});
+				this.setState(prevState => ({
+	      			numOfItems:--prevState.numOfItems,
+	   			 }));
 				this.handlePrice('-');	
-			}
+			}		
 			
 		}
 		
 		handlePlus =()=> {
 			if(this.state.stock >0){
-			this.setState({numOfItems: ++ this.state.numOfItems});
+
+				this.setState(prevState => ({
+	      			numOfItems:++prevState.numOfItems,
+	      			
+	   			 }));
 			this.handlePrice('*');
 			}
 			
@@ -75,41 +86,53 @@ constructor(props){
 		
 
 		handleChange=()=> {
-			this.setState({toggle:'crypto'});
+			this.setState({...this.state,toggle:'crypto'});
 		}
 
 		moveBack=()=> {
-			this.setState({toggle:'moveBackToCrypto'});
+			this.setState({...this.state,toggle:'moveBackToCrypto'});
 		}
 
 		rejectCrypto=()=> {
 			this.setState({
+				...this.state,
 				toggle:'rejectCrypto',
 		});
 		}
 
 		continueWithCrypto=(e)=> {
+			console.log(e.target.id);
 			this.setState({
+				...this.state,
 				toggle:'continueCrypto',
 					isCrypto:e.target.id
 		});
+
 		}
 		
 		submitEmail=()=> {
 			const {email, clientAmount, description,title,isCrypto} = this.state;
+			console.log(isCrypto);
 			const regex =new RegExp(/.*[@].*\.com/,'gi');
 			if(email.match(regex) !== null) {
 			if(this.state.isCrypto ==="paypal") {
 				return this.props.history.push('/paypal/purchase');
 			}
+			this.props.unmounted();
+			this.props.removeServerError();
 			this.props.CoinbaseApiCall({title,description,clientAmount,email,isCrypto})
-			.then(()=> {})
-			this.setState({isSubmited:true})
+			.then(()=> {});
+			this.setState({...this.state,isSubmited:true})
 			this.props.history.push('/purchase');
 		
+			
+		
+
+
+
 			}else if(email.match(regex)=== null) {
 				
-			this.setState({err:true});
+			this.setState({...this.state,err:true});
 			}	
 		}
 
@@ -117,11 +140,11 @@ constructor(props){
 
 
 		handleInput=(e)=> {
-			this.setState({email:e.target.value});
+			this.setState({...this.state,email:e.target.value});
 		}
 
 		handlefocus=()=> {
-		this.setState({err:false});
+		this.setState({...this.state,err:false});
 		}
 		
 		handleDanamic=()=> {
@@ -130,7 +153,6 @@ constructor(props){
 				case 'button':
 				return (<button onClick={this.handleChange} className='btn form-control' style={styles.button}>purchase</button>);
 				break;
-
 				case 'crypto':
 				return ((<Cryptos 
 					span1={styles.span1} 
@@ -185,6 +207,9 @@ constructor(props){
 					/>);
 				break;
 
+				default:
+				return '';
+
 			}
 		}
 
@@ -231,7 +256,7 @@ return {
 }
 }
 
-export default withRouter(connect(mapStateToProps,{Get_panels,CoinbaseApiCall})(Details));
+export default withRouter(connect(mapStateToProps,{unmounted,Get_panels,CoinbaseApiCall,removeServerError})(Details));
 
 
 

@@ -2,22 +2,24 @@ import React, { Component } from 'react';
 import Navigation from './Navigation';
 import Products from './Products/Products';
 import AdminProducts from './Admin/Products';
+import Upload from './Admin/Upload';
 import Details from './Payment/Details';
+import AdminFeedbacks from './Admin/AdminFeedbacks';
 import Payment from './Payment/Payment';
 import Paypal from './Payment/Paypal';
 import Login from './Admin/Login';
 import Register from './Admin/Register';
+import SendFeedback from './SendFeedback';
 import Footer from './Footer';
 import AddProduct from './Admin/AddProduct';
 import Edit from './Admin/Edit';
 import IsAthenticated from './IsAthenticated';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import '../index.css';
 import { Get_panels} from './Store/Action';
 import Contact from './Contact';
+import Feedback from './feedback';
 import { connect } from 'react-redux';
-import Upload from './Admin/Upload';
-
 class Layout extends Component {
 	constructor() {
 		super()
@@ -51,7 +53,11 @@ class Layout extends Component {
 				<Route  path='/admin/add' component={IsAthenticated(AddProduct)} />
 				<Route  path='/admin/:id/edit' component={IsAthenticated(Edit)} />
 				<Route  path='/contact' component={Contact } />
+				<Route  path='/admin/feedbacks' component={AdminFeedbacks} />
+				<Route  path='/feedbacks' component={Feedback } />
+				<Route  path='/admin/medias' component={Upload} />
 				<Route  path='/register' component={Register } />
+				<Route  path='/feedback' component={SendFeedback} />
 				<Route  path='/admin' component={()=><Login />} />
 				</Switch>
 				<Footer />

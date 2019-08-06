@@ -1,6 +1,4 @@
-import React, { Component } from 'react';
-import FaAngleLeft from 'react-icons/lib/fa/angle-left';
-import FaAngleRight from 'react-icons/lib/fa/angle-right';
+import React from 'react';
 import IoIosClose from 'react-icons/lib/io/close';
 import FaPlus from 'react-icons/lib/fa/plus';
 import FaMinus from 'react-icons/lib/fa/minus';
@@ -8,7 +6,7 @@ import FaDollarSign from 'react-icons/lib/fa/dollar';
 
 
 
- const SideBar =(props)=> {
+const SideBar =(props)=> {
 return (
 
 <div className='col-sm-3'>

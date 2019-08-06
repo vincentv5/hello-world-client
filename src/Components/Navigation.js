@@ -1,21 +1,19 @@
 import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import MdEject from 'react-icons/lib/md/eject';
-import FaPlus from 'react-icons/lib/fa/plus';
-import MdEllipsisMenu from 'react-icons/lib/md/keyboard-control';
 import {Navbar,NavbarBrand,NavItem, Container,NavbarToggler,Collapse,Nav } from 'reactstrap';
 import { connect } from 'react-redux';
 import { Logout } from './Store/Action';
+
 const Navigation = (props) => {
-const style={backgroundColor:'#1c2260',marginLeft:'15px',color:'white',fontSize:'20px',fontWeight:'bold',textDecoration:'none'};
 const add = props.auth ? 'Admin' : '';
-const prod = props.auth ?(<Link to='/admin/products'  style={style}><MdEllipsisMenu /></Link>): '';
 const logout = props.auth? "Logout": '';
 
 return (
 	<React.Fragment>
 	<Navbar   dark expand="md" className="navbar-light" style={{backgroundColor:"#1c2260"}}>
-   <NavbarBrand className='pa0 grow pointer' style={{color:'white'}}><img className='navLogo'  src='images/helloWorld.jpg'/><em>HelloWorld</em></NavbarBrand>
+   <NavbarBrand onClick={()=>{
+   	props.history.push('/');
+   }} className='pa0 grow pointer' style={{color:'white'}}><img className='navLogo'  src='/images/helloWorld.jpg' alt=''/><em>HelloWorld</em></NavbarBrand>
    <NavbarToggler  onClick={props.toggleNavbar} />
 	   		<Collapse isOpen={!props.collapsed} navbar>
 	   		<Container style={{marginLeft:'80%'}}>

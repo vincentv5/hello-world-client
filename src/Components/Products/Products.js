@@ -1,11 +1,10 @@
 import React,{Component} from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {Navbar,NavbarBrand, Nav, NavItem, Container, } from 'reactstrap';
 import Spinner from '../Spinner';
 import Cards from  './Cards';
 import Header from './Header';
-import { Get_panels } from '../Store/Action';
+import { Get_panels,Get_contacts,Get_feedbacks } from '../Store/Action';
 
 class Products extends Component {
 	constructor(props){
@@ -16,8 +15,10 @@ class Products extends Component {
 	}
 
 	componentDidMount() {
+		this.props.Get_feedbacks();
+		this.props.Get_contacts();
 		this.props.Get_panels().then(()=> {
-			this.setState({loading:false});
+			this.setState({...this.state,loading:false});
 		});
 	}
 	render() {
@@ -42,4 +43,4 @@ const mapStateToProps=(state)=> {
 		panel:state.data
 	}
 }
-export default connect(mapStateToProps,{Get_panels})(Products);
+export default connect(mapStateToProps,{Get_panels,Get_contacts,Get_feedbacks})(Products);

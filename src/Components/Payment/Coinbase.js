@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import Spinner from '../Spinner';
 import { connect } from 'react-redux';
 import FaBtc from 'react-icons/lib/fa/bitcoin';
-import {cancel_charge} from '../Store/Action';
+import {cancel_charge,unmounted} from '../Store/Action';
 
 class Coinbase extends Component{
 	constructor(props) {
@@ -20,6 +20,7 @@ class Coinbase extends Component{
 		if(this.props.isCoinbase) {
 		const intervalId= setInterval(this.timer,1000);
 		this.setState({
+			...this.state,
 		intervalId:intervalId
 		})
 		}
@@ -29,6 +30,7 @@ class Coinbase extends Component{
 	componentWillUnmount() {
 		clearInterval(this.state.intervalId);
 		this.props.cancel_charge(this.props.coinbaseInfo.code).then(()=>console.log('canceled'));
+		this.props.unmounted();
 	}
 
 	timer=()=> {
@@ -46,6 +48,7 @@ class Coinbase extends Component{
 			    } else {
 				  clearInterval(this.state.intervalId);
 				   this.setState({
+				   	...this.state,
 			       	timeElapse:true
 			      });
 			   
@@ -53,26 +56,6 @@ class Coinbase extends Component{
 			    
  }
 
- getAmount =()=> {
- 	let price=this.props.coinbaseInfo.pricing;
- 	if(this.props.coinbaseInfo){
-
- 		return {
- 			amount: price[this.props.isCrypto].amount,
- 			btc:price[this.props.isCrypto].currency
- 		}
- 		
- 	}		
- }
-
- getAddress =()=> {
- 	let addresses=this.props.coinbaseInfo.addresses
- 	if(this.props.coinbaseInfo) {
-		return addresses[this.props.isCrypto];
- 	}
-	
- 	
- }
 
  handleCopy=()=> {
  	document.getElementById('copy').select();
@@ -82,6 +65,13 @@ class Coinbase extends Component{
 
 	render() {
 		const { coinbaseInfo } = this.props;
+		const image = this.props.isCrypto ==='bitcoin'?'/images/bitcoin.png'
+		:this.props.isCrypto ==='ethereum'?'/images/ethereum.png':'';
+		let price=coinbaseInfo.pricing;
+		const amount =price[this.props.isCrypto].amount;
+		const btc =price[this.props.isCrypto].currency;
+		let addresses =coinbaseInfo.addresses;
+		const address =addresses[this.props.isCrypto]; 
 		const { mins , secs , timeElapse }=this.state;
         const isElapseTime= timeElapse?(<p>timeout</p>):(<p>awaiting payment....</p>);
 		return (
@@ -95,25 +85,25 @@ class Coinbase extends Component{
 
 
 				<div className="price" style={{backgroundColor:'#e3e1e1',padding:'5px'}}>
-				<p>{`${this.getAmount().amount} ${this.getAmount().btc}`}</p>
+				<p>{`${amount?amount:''} ${btc?btc:''}`}</p>
 				</div>
 
 				<div className="paymentDetail" style={{height:'40vh'}}>
-				<div className='tc mt5'>
-					<img src=''  alt="no image yet"/>
+				<div className='tc mt4'>
+					<img width='50' height='50' src={image}  alt=""/>
 				</div>	
-				<h6 className='tc mt3'>You are paying with <strong>{this.getAmount().btc}</strong></h6>
-				<p className='tc'>{`Order ID: ${coinbaseInfo.id}`}</p>
-				<div className="tc">
+				<h6 className='tc mt4'>You are paying with <strong>{btc?btc:''}</strong></h6>
+				<p className='tc'><span></span>Order ID: <span style={{backgroundColor:"#e3e1e1"}}>{coinbaseInfo.id}</span></p>
+				<div className="tc mt4">
 					<button style={{borderRadius:"20%",backgroundColor:"#1c2260",color:'white'}} className='btn' onClick={this.handleCopy}>copy</button>
 				</div>
-				<p className='tc'>Please send exactly <code style={{backgroundColor:"#e3e1e1"}}>{this.getAmount().amount}</code> <strong>{this.getAmount().btc}</strong></p>
-
+				<p className='tc mt4'>Please send exactly <code style={{backgroundColor:"#e3e1e1"}}>{amount?amount:''}</code> <strong>{btc}</strong></p>
 				</div>
+				<br />
 
 				<div className="paymentButton" style={{display:'flex'}}>
 						<span style={style.btcStyle}><FaBtc /></span>
-							<input className='form-control' id='copy' type='text' value={this.getAddress()} readOnly/>
+							<input className='form-control' id='copy' type='text' value={address} readOnly/>
 						<a className="btn btn-primary" style={style}  
 						href={coinbaseInfo.hosted_url} target='blank'>pay
 						</a>
@@ -146,4 +136,4 @@ const mapStateToProps =(state)=> {
 
 }
 
-export default connect(mapStateToProps,{cancel_charge})(Coinbase);
+export default connect(mapStateToProps,{cancel_charge,unmounted})(Coinbase);

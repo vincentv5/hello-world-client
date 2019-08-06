@@ -1,17 +1,30 @@
-import {CREATE_CHARGE, CREATE_PANEL,UPDATE_PANEL,DELETE_PANEL,LOGIN,LOGOUT,GETPANELS} from './Constants';
+import {
+	GET_CONTACT,
+	GET_FEEDBACK,
+	CREATE_CHARGE, 
+	CREATE_PANEL,
+	UPDATE_PANEL,
+	DELETE_PANEL,
+	LOGIN, 
+	LOGOUT,
+	REGISTER,
+	GETPANELS
+} from './Constants';
 
 const StoreRoom = {
 		isAuthenticated:false,
 		user:{},
 		data:[],
+		feedbacks:[],
+		contacts:[],
 		isError:false,
 		isCoinbase:false,
 		coinbase:null,
 		isCrypto:null,
+		uploadedFiles:null
 }
 
 export default (state=StoreRoom, action)=> {
-
 	switch(action.type) {
 		case CREATE_PANEL:
 		return {
@@ -95,6 +108,27 @@ export default (state=StoreRoom, action)=> {
 						coinbase:null,
 						isCrypto:null
 					}
+					break;
+
+					case GET_CONTACT:
+					return {
+						...state,
+						contacts:action.data
+					}
+					break;
+
+					case GET_FEEDBACK:
+					return {
+						...state,
+						feedbacks:action.data
+					}
+
+					case "GET_UPLOADS":
+					return {
+						...state,
+						uploadedFiles:action.data
+					}
+
 					break;
 
 			default:

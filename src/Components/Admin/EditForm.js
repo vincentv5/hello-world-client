@@ -1,7 +1,23 @@
 import React from 'react';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+const base_url = "http://localhost:3001";
 const EditForm =(props)=> {
-	const { serverErr, handleFocus,label,error, err,isDeleted,success,errMessage, state,isClicked,handleInput,handleSubmit,handleDelete}=props;
-	const {title,description,stock,price,image,id,license }=state
+	const options =props.Images
+	?props.Images.path.map((val)=> {
+		return (	
+		<DropdownItem key={val.path}>
+			<img 
+			onClick={props.selectInput} 
+			width='50' 
+			height='50' 
+			src={`${base_url}/${val.path}`} alt=''
+			/>
+		</DropdownItem>
+			)
+	}):'';
+	
+	const { serverErr, handleFocus,label,err,isDeleted,success,errMessage, state,isClicked,handleInput,handleSubmit,handleDelete}=props;
+	const {title,description,stock,price,id,license }=state
 	return (
 			<div>
 			<br />
@@ -41,9 +57,18 @@ const EditForm =(props)=> {
 						<input onFocus={handleFocus} onChange={handleInput} className={`${err} br3 pa2 input-reset ba bg-transparent   w-100`} type="number" name='price'  id="stock" value={price}/>
 					  </div>
 
-					   <div className="mt3">
+					   <div className="mt1">
 						<label style={label} className="fw6 lh-copy f6 font" htmlFor="Name">Image</label>
-						<input onFocus={handleFocus} onChange={handleInput} className={`${err} br3 pa2 input-reset ba bg-transparent   w-100`} type="file" name="image"  id="image"/>
+							<Dropdown direction="up" isOpen={props.dropdownOpen} toggle={props.toggle}>
+					          <DropdownToggle>
+							    select an image
+							  </DropdownToggle>
+							  <DropdownMenu
+							    modifiers={style.modify}
+							  >
+							  {options}
+							  </DropdownMenu>
+							</Dropdown>
 					  </div>
 
 						<div className="mt3">
@@ -62,5 +87,22 @@ const EditForm =(props)=> {
 		)
 }
 
-
+const style={
+	modify:{
+	setMaxHeight: {
+	enabled: true,
+	order: 890,
+	fn: (data) => {
+	  return {
+	    ...data,
+	    styles: {
+	      ...data.styles,
+	      overflow: 'auto',
+	      maxHeight: 300,
+	    },
+	  };
+	},
+	},
+	}
+}
 export default EditForm;
