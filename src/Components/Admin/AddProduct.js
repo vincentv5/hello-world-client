@@ -65,6 +65,7 @@ class AddProduct extends Component {
 				image:'',
 				license:'',
 				keys:'',
+				file:'',
 				success:true,
 				error:false
 	
@@ -127,6 +128,7 @@ class AddProduct extends Component {
 			<div style={{display:'flex'}}>
 			<SideNav />
 			<div style={{flex:'1'}}>
+
 			<AddForm 
 				handleInput={this.handleInput}
 				handleSubmit={this.handleSubmit}
@@ -144,6 +146,7 @@ class AddProduct extends Component {
 				selectInput={this.selectInput}
 				toggle={this.toggle}
 				dropdownOpen={this.state.dropdownOpen}
+				file={this.state.file}
 			/>
 			</div>
 			</div>

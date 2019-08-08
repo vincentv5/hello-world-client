@@ -37,7 +37,7 @@ import EditForm from './EditForm';
 	 	if(panel.length!== 0) {
 	 	const idx = this.props.match.params.id;
 	 	const results = panel.filter((val,i)=>val._id === idx );
-	 	const {image, title, description , stock ,price,id,licensekey,_id} = results[0]
+	 	const {image, title, description , stock ,price,licensekey,_id} = results[0]
 	 	const keyToString = licensekey.toString();
 	 	this.setState({
 			title:title,
@@ -210,10 +210,10 @@ import EditForm from './EditForm';
 			fontSize:"15px",
 			marginLeft:"5px"
 		}
-		const isClicked = this.state.isClicked? true : false;
+		// const isClicked = this.state.isClicked? true : false;
 		const error = this.state.error;
 		const isDeleted = this.state.isDeleted ?(<div className='col-sm-5 m-auto alert alert-success tc'>you have successfully deleted a package</div>):'' 
-		const {title,description,stock,price,image,id,license } = this.state;
+		// const {title,description,stock,price,image,id} = this.state;
 		const err = error ? 'danger' : ''
 		const success = this.state.success?(<div className='col-sm-5 m-auto alert alert-success tc'>you have successfully updated a package</div>): '';
 		const errMessage = error ? (<div className='col-sm-5 m-auto alert alert-danger'>all fields are required</div>)  : '';
@@ -240,6 +240,7 @@ import EditForm from './EditForm';
 					selectInput={this.selectInput}
 					toggle={this.toggle}
 					dropdownOpen={this.state.dropdownOpen}
+					file ={this.state.file}
 			/>
 			</div>
 			</div>

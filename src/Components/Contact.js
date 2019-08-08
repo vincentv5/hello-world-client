@@ -7,7 +7,6 @@ import { Contact_us,removeServerError } from './Store/Action';
  		super(props);
  		this.state={
  			email:'',
- 			email:'',
  			message:'',
  			error:false,
 			serverErr:false,

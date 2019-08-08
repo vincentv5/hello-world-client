@@ -57,8 +57,7 @@ const EditForm =(props)=> {
 						<input onFocus={handleFocus} onChange={handleInput} className={`${err} br3 pa2 input-reset ba bg-transparent   w-100`} type="number" name='price'  id="stock" value={price}/>
 					  </div>
 
-					   <div className="mt1">
-						<label style={label} className="fw6 lh-copy f6 font" htmlFor="Name">Image</label>
+					   <div className="mt2" style={{display:"flex",justifyContent:"space-between"}}>
 							<Dropdown direction="up" isOpen={props.dropdownOpen} toggle={props.toggle}>
 					          <DropdownToggle>
 							    select an image
@@ -69,9 +68,10 @@ const EditForm =(props)=> {
 							  {options}
 							  </DropdownMenu>
 							</Dropdown>
+							<img src={`${props.file}`} alt="" width="100" height="100"/>
 					  </div>
 
-						<div className="mt3">
+						<div>
 						<label style={label} className="fw6 lh-copy f6 font" htmlFor="Name">Keys</label>
 						<textarea rows='5' onFocus={handleFocus} onChange={handleInput} className={`${err} br3 pa2 input-reset ba bg-transparent   w-100`} type="text" name="license"  id="license" value={license}/>
 					  </div>

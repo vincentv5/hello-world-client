@@ -26,8 +26,8 @@ export class SideNav extends Component {
     return (
       <div className={`d-flex ${toggler}`} id="wrapper" >
       <div className="bg-side-nav border-right" id="sidebar-wrapper" style={{backgroundColor:"#1c2260"}}>
-          <div className="sidebar-heading ">
-            <img   src='/images/helloWorld.jpg' heigth='50' width="50" style={{borderRadius:"100%"}}/>
+          <div className="sidebar-heading">
+            <img alt=""   src='/images/helloWorld.jpg' heigth='50' width="50" style={{borderRadius:"100%"}}/>
           </div>
 
       <div className="list-group list-group-flush" >

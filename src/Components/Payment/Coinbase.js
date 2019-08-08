@@ -1,5 +1,4 @@
 import React,{Component} from 'react';
-import Spinner from '../Spinner';
 import { connect } from 'react-redux';
 import FaBtc from 'react-icons/lib/fa/bitcoin';
 import {cancel_charge,unmounted} from '../Store/Action';
@@ -16,7 +15,7 @@ class Coinbase extends Component{
 
 	}
 	componentDidMount() {
-		
+		window.clearInterval(this.state.intervalId);
 		if(this.props.isCoinbase) {
 		const intervalId= setInterval(this.timer,1000);
 		this.setState({
@@ -28,7 +27,7 @@ class Coinbase extends Component{
 	}
 	
 	componentWillUnmount() {
-		clearInterval(this.state.intervalId);
+		window.clearInterval(this.state.intervalId);
 		this.props.cancel_charge(this.props.coinbaseInfo.code).then(()=>console.log('canceled'));
 		this.props.unmounted();
 	}
@@ -46,7 +45,7 @@ class Coinbase extends Component{
 			       });	
 			       
 			    } else {
-				  clearInterval(this.state.intervalId);
+				  window.clearInterval(this.state.intervalId);
 				   this.setState({
 				   	...this.state,
 			       	timeElapse:true

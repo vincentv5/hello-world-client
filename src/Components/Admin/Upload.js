@@ -1,10 +1,9 @@
 import React from 'react';
 import ImageUploader from 'react-images-upload';
-import axios from 'axios';
 import { SideNav } from './SideNav';
 import Spinner from '../Spinner';
 import {connect} from 'react-redux';
-import {removeServerError,handleUpload,getUploads} from '../Store/Action';
+import {removeServerError,handleUpload,getUploads,deleteUploads} from '../Store/Action';
 const base_url = "http://localhost:3001";
 
  class Upload extends React.Component {
@@ -14,16 +13,24 @@ const base_url = "http://localhost:3001";
          this.state = { 
 			 pictures: null, 
              uploaded:false,
-             sendFile:false
+             sendFile:false,
+             file:'',
 			};
          
     }
     componentDidMount() {
+        this.props.removeServerError();
          this.props.getUploads().then(()=> {
-               this.setState({uploaded:true});
+            if(this.props.errorFromServer){
+               this.setState({uploaded:false}); 
+            }else {
+            this.setState({uploaded:true}); 
+            }
+         
            })
     }
-   
+
+
     onDrop=(picture)=> {
          this.setState({
             ...this.state,
@@ -33,19 +40,47 @@ const base_url = "http://localhost:3001";
         this.props.removeServerError();
         this.setState({...this.state,uploaded:false})
         this.props.handleUpload(this.state.pictures).then(()=> {
+            this.setState({...this.state,sendFile:true})
             this.props.getUploads().then(()=> {
-               this.setState({...this.state,uploaded:true}); 
+               
+                    if(this.props.errorFromServer) {
+                   this.setState({...this.state,uploaded:false});
+                   }else {
+                    this.setState({...this.state,uploaded:true,sendFile:false});
+                   }  
+             
+               
             })
         }) 
     })  
  }
+ 
+ handleDelete=(e)=> {
+    this.setState({
+        ...this.state,
+        file:e.target.id,
+    },()=> {
 
+        this.props.deleteUploads(this.state.file)
+        .then(()=> {
+            this.props.getUploads().then(()=>{
+                this.setState({
+               file:'',
+            })
+            })
+            
+        })
+
+    })
+   
+ }
 
         
     render() {
             const images = this.state.uploaded
             ?this.props.Images.path.map((val)=>(
-            <div key={val._id} className = "rounded grow  pa1 center  mb5 pointer"> 
+            <div key={val.path} className = "img-wrap rounded  pa1 center  mb5 pointer"> 
+            <span onClick={this.handleDelete} id={`${val.path}`}  className="close">&times;</span>
                 <img width="200" height="200" src={`${base_url}/${val.path}`} alt=""/>
             </div>
             )):this.state.sendFile?(<Spinner size={30}/>):"";
@@ -78,8 +113,9 @@ const base_url = "http://localhost:3001";
 }
 const mapStateToProps=(state)=> {
     return {
-        Images:state.uploadedFiles
+        Images:state.uploadedFiles,
+        errorFromServer:state.isError,
     }
 }
 
-export default connect(mapStateToProps,{removeServerError,getUploads,handleUpload})(Upload)
+export default connect(mapStateToProps,{deleteUploads,removeServerError,getUploads,handleUpload})(Upload)

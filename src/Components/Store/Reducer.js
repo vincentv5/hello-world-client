@@ -7,7 +7,6 @@ import {
 	DELETE_PANEL,
 	LOGIN, 
 	LOGOUT,
-	REGISTER,
 	GETPANELS
 } from './Constants';
 
@@ -130,6 +129,19 @@ export default (state=StoreRoom, action)=> {
 					}
 
 					break;
+
+					case "DELETE_UPLOADS":
+							let path=null;
+							state.uploadedFiles.forEach((val,i)=>{if(val.path === action.data)path=i; return;});
+							if(path !== null) state.uploadedFiles.splice(path,1);
+					     	return {
+					     		...state,
+					     		uploadedFiles:state.uploadedFiles
+					     	}
+
+					     	break;
+
+
 
 			default:
 			return state;

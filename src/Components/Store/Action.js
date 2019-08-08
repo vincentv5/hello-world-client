@@ -2,24 +2,21 @@ import {
 	get_feedbacks,
 	get_contacts,
 	send_feedback,
-	contact_us,
 	login,
 	create_panel,
 	delete_panel,
 	update_panel,
 	logout,
-	register,
 	get_panels,
 	coinbase
 
 }
 from './ActionsCreator';
-
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import store from './index';
 const base_url = "http://localhost:3001";
-const coinbaseUrl ='https://api.commerce.coinbase.com';
+
 function HandleError(message){
 	store.dispatch({
 		type:'ERROR',
@@ -27,32 +24,7 @@ function HandleError(message){
 		
 	})
 }
-const headersObj=(title,description,price,email)=> {
-	return {
-		method: "post",
-		headers: {
-		"Content-type":"application/json",
-		"X-CC-Api-Key":"04779eb3-db97-4476-9716-44f11420e132",
-		"X-CC-Version":"2018-03-22"
-		},
-		body:JSON.stringify({
-		name:`${title}`,
-		description:`${description}`,
-		pricing_type:'fixed_price',
-		local_price:{
-			amount:`${price}`,
-			currency:"USD"
-		},
-		metadata:{
-			costumer_name:`${email}`
-		},
-		redirect_url:"",
-		cancel_url:""
 
-		})
-		}
-
-}
 
 
 export const setAuthorizationHeader=(token)=> {
@@ -135,23 +107,23 @@ export const Get_panels=()=>dispatch=> {
 }
 
 export const CoinbaseApiCall=(data)=>dispatch=>{
-	return fetch(`${coinbaseUrl}/charges`,headersObj(data.title,data.description,data.clientAmount,data.email))
+	return axios.post(`${base_url}/charges`,data)
 	.then((res)=> {
-		return res.json();
-	}).then((values)=> {
-		const results =values.data;
+		if(res.status === 200) {
+		const results =res.data;
 		const isCrypto=data.isCrypto;
-	return dispatch(coinbase({results,isCrypto}))
+		return dispatch(coinbase({results,isCrypto}))
+		}
+		
+		HandleError(true)
 		
 	})
-	.catch((err)=>HandleError(true));
+	.catch((err)=>HandleError(true))
+
 	 
 }
 export const cancel_charge=(id)=>dispatch=> {
-	return fetch(`${coinbaseUrl}/charges/${id}/cancel`,{
-		method:'post'
-	})
-	.then(res=>res.json())
+	return axios.post(`${base_url}/charges/${id}/cancel`)
 	.then(result=>console.log)
 	.catch(err=>HandleError(true));
 }
@@ -222,22 +194,32 @@ export const handleUpload=(pictures)=>dispatch=>{
         
 }
 
-export const getUploads=()=>dispatch=>{
+export const getUploads=(data)=>dispatch=>{
 	return axios.get(`${base_url}/multiple`)
 	.then((res)=>{
-		if(res.status === 200) {
-			console.log(res.data);
-		dispatch({
-		type:"GET_UPLOADS",
-		data:res.data
-	})
-	}else {
-		HandleError(true)
-	}
-
+		if(res.status === 200 && res.data !==null) {
+			return dispatch({
+				type:"GET_UPLOADS",
+				data:res.data
+			})
+		}else {
+			HandleError(true)
+		}
 	}).catch(()=>HandleError(true));
 }
 
 
-
+export const deleteUploads=(data)=>dispatch=> {
+	return axios.post(`${base_url}/multiple/delete`,{file:data})
+	.then((res)=>{
+		if(res.status === 200) return dispatch({
+			type:"DELETE_UPLOADS",
+			data:data.file
+		});
+		return HandleError(true);
+	})
+	.catch((err)=> {
+		return HandleError(true)
+	})
+}
 

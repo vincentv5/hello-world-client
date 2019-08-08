@@ -4,6 +4,12 @@ body{
 	background-color: #f4f6f8;
 }
 
+
+
+.img-wrap .close {
+ 
+}
+
 .styling1{
 	display: flex;
 	flex-basis: 400;
@@ -22,6 +28,12 @@ body{
 	padding:20px;
 	
 }
+
+
+/*.modal-dialog {
+	flex-basis: 35vw;
+	flex-shrink: 1;
+}*/
 .title{
 	color:white;
 }
@@ -172,7 +184,10 @@ flex-direction: row;
 
   }
 
-
+/*.modal-dialog {
+	flex-basis: 35vw;
+	flex-shrink: 1;
+}*/
   #page-content-wrapper {
     min-width: 0;
     width: 100%;
