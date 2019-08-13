@@ -13,7 +13,7 @@ const Contact=(props)=> {
 	const tr = props.contact
 	?props.contact.map((val)=>{
 		return (
-				<tr key={val._id}>
+				<tr key={val._id} className="shadow-2 pa3">
 					<td className="td pointer"><h6>{val.email}</h6></td>
 					<td className="td">{val.name}</td>
 					<td style={styles.link} 
@@ -103,6 +103,9 @@ const styles={
 	icon:{
 		fontSize:"25px",
 		fontWeight:"bold"
+	},
+	tr:{
+
 	}
 }
 export default connect(mapStateToProps,null)(Contact);
