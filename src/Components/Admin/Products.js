@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Spinner from '../Spinner';
 import { connect } from 'react-redux';
-import Card from  './Card';
+import Card from  './Product';
 import { Get_panels } from '../Store/Action';
 import { SideNav } from './SideNav';
 
@@ -14,7 +14,10 @@ class Products extends Component {
 		}
 	}
 
-	componentDidMount() {
+	componentWillMount() {
+		this.setState({
+				loading:true
+			})
 		this.props.Get_panels().then(()=> {
 			this.setState({
 				loading:false

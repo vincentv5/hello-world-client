@@ -12,10 +12,11 @@ import {
 
 const StoreRoom = {
 		isAuthenticated:false,
+		isUser:false,
 		user:{},
-		data:[],
-		feedbacks:[],
-		contacts:[],
+		data:null,
+		feedbacks:null,
+		contacts:null,
 		isError:false,
 		isCoinbase:false,
 		coinbase:null,
@@ -141,15 +142,83 @@ export default (state=StoreRoom, action)=> {
 
 					     	break;
 
+					     	case "IS_USER":
+					     	return {
+					     		...state,
+					     		isUser:true
+					     	}
+
+					     	break;
+
+					     	case "BULK_CONTACT_DELETE":
+					     	const stuff = [];
+					     	let len = state.contacts.length;
+					     	let len2 = action.data.length;
+					     	for(let i =0; i<len; i++) {
+					     		for(let j=0; j<len2; j++) {
+
+					     			if(state.contacts[i].email!==action.data[j].email) {
+
+					     				stuff.push(state.contacts[i]);
+					     			}
+					     		}
+					     	}
+					     	return {
+					     		...state,
+					     		contacts:stuff
+					     	} 
+
+					     	break;
+
+					     	case "SINGLE_CONTACT_DELETE":
+					     	return {
+					     		...state,
+					     		contacts:state.contacts.filter((val)=>{
+									if(val.email !== action.data.email){
+										return val;
+									}
+					     		})
+					     	}
+
+					     	break;
+
+					     	case "BULK_FEEDBACK_DELETE":
+					     	const newFeedback = [];
+					     	let ln = state.feedbacks.length;
+					     	let ln2 = action.data.length;
+					     	for(let i =0; i<ln; i++) {
+					     		for(let j=0; j<ln2; j++) {
+
+					     			if(state.feedbacks[i].email!==action.data[j].email) {
+
+					     				newFeedback.push(state.feedbacks[i]);
+					     			}
+					     		}
+					     	}
+					     	return {
+					     		...state,
+					     		feedbacks:newFeedback
+					     	} 
+
+					     	break;
+
+					     	case "SINGLE_FEEDBACK_DELETE":
+					     	return {
+					     		...state,
+					     		feedbacks:state.feedbacks.filter((val)=>{
+									if(val.email !== action.data.email){
+										return val;
+									}
+					     		})
+					     	}
+					     	break;
+
 
 
 			default:
 			return state;
-
-
-
+			
 	}
-
 
 }
 

@@ -2,21 +2,23 @@ import React, { Component } from 'react';
 import { SideNav } from './SideNav';
 import { connect } from 'react-redux';
 import Spinner from '../Spinner';
-import { Get_feedbacks,Reply_feedback } from '../Store/Action';
-import Feedback from './Feedback';
+import { Get_contacts,Reply_contact} from '../Store/Action';
+import Contact from './Contact';
 
-class AdminFeedbacks extends Component {
+class AdminContact extends Component {
 	constructor(props){
 		super(props);
 		this.state={
 			loading:true,
 			message:'',
-			id:null
+			email:null,
+			success:false,
+			failure:false
 		}
 	}
 
 	componentDidMount() {
-		this.props.Get_feedbacks().then(()=> {
+		this.props.Get_contacts().then(()=> {
 			this.setState({...this.state,loading:false});
 		});
 	}
@@ -31,7 +33,7 @@ class AdminFeedbacks extends Component {
 	handleSubmit=()=> {
 		const {message,email}=this.state;
 		if(!message || !email) {
-			this.props.Reply_feedback(message,email).then(()=>{
+			this.props.Reply_contact(message,email).then(()=>{
 			return this.setState({
 			message:'',
 			email:null,
@@ -39,7 +41,7 @@ class AdminFeedbacks extends Component {
 			failure:false
 		})
 		})
-	}
+		}
 		
 			return this.setState({
 			message:'',
@@ -47,8 +49,6 @@ class AdminFeedbacks extends Component {
 			success:true,
 			failure:false
 		})
-		
-		
 	}
 
 	handleChange=(e)=> {
@@ -61,22 +61,25 @@ class AdminFeedbacks extends Component {
 	render() {
 		const success=this.state.success?true:false;
 		const failure=this.state.failure?true:false;
+
 		const isCard = this.state.loading?(<Spinner loading={this.state.loading} size={60}/>)
-		:(<Feedback 
-			feedbacks={this.props.feedbacks}
+		:(<Contact 
+			Contacts={this.props.Contacts}
 			handleChange={this.handleChange}
 			handleSubmit={this.handleSubmit}
 			state={this.state}
 			getUniqueUserId={this.getUniqueUserId}
-			failure={failure}
 			success={success}
+			failure={failure}
 			/>);
+		
 		return (
 			<div style={{display:"flex"}}>
 			<SideNav />
 			<div style={{flex:"1"}}>
 				<div className="main">
-					<div className="styling2 mt5">
+					<div className="styling1 mt5">
+						
 					{isCard}
 			
 					</div>
@@ -90,10 +93,10 @@ class AdminFeedbacks extends Component {
 	 
 const mapStateToProps=(state)=> {
 	return {
-		feedbacks:state.feedbacks
+		Contacts:state.contacts
 	}
 }
-export default connect(mapStateToProps,{Get_feedbacks,Reply_feedback})(AdminFeedbacks);
+export default connect(mapStateToProps,{Get_contacts,Reply_contact})(AdminContact);
 
 
 

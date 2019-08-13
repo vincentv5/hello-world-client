@@ -1,7 +1,18 @@
 import {compose, createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import reducer from './Reducer';
-const store =createStore(
+
+let store=null;
+
+if(process.env.NODE_ENV === 'production') {
+   store =createStore(
+		reducer,
+		compose(
+			applyMiddleware(thunk),	
+		)
+	);
+} else {
+    store =createStore(
 		reducer,
 		compose(
 			applyMiddleware(thunk),
@@ -9,6 +20,8 @@ const store =createStore(
 			f=>f
 		)
 	);
+}
+
 
 
 store.subscribe(test)

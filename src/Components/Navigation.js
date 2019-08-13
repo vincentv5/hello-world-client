@@ -24,7 +24,7 @@ return (
             	</Link>
             </NavItem>
             <NavItem>
-            	<Link to='/admin/products' style={{marginLeft:'15px',textDecoration:'none',color:'white',fontSize:'15px',fontWeight:'bold'}}>
+            	<Link to='/admin/dashboard' style={{marginLeft:'15px',textDecoration:'none',color:'white',fontSize:'15px',fontWeight:'bold'}}>
             		{add}
             	</Link>
             </NavItem>

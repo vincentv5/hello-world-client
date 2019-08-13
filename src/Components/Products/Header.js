@@ -2,16 +2,16 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 const Header = (props) => {
-	const prod = props.products.length?props.products.length:0;
-	const cont = props.contacts.length? props.contacts.length:0;
-	const feedb = props.feedbacks.length?props.feedbacks.length:0;
+	const prod = props.products?props.products.length:0;
+	const cont = props.contacts? props.contacts.length:0;
+	const feedb = props.feedbacks?props.feedbacks.length:0;
 	return (
 		<div className='header'>
 		<div className='logoImage'>
 			<img className='logoImage' alt='' src='images/helloWorld.jpg' />
 		</div>
 		<br />
-		<h5 className='tc title'>fairlyLand</h5>
+		<h5 className='tc title'>onePay</h5>
 		<h6 className='tc bracket'>
 		(<span style={{color:'green'}}>
 		{prod}

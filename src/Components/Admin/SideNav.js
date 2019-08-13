@@ -31,13 +31,11 @@ export class SideNav extends Component {
           </div>
 
       <div className="list-group list-group-flush" >
-        <Link to="/admin/products" className="list-group-item list-group-item-action bg-side-item">Dashboard</Link>
+        <Link to='/admin/dashboard' className="list-group-item list-group-item-action bg-side-item">Dashboard</Link>
         <Link to="/admin/products" className="list-group-item list-group-item-action bg-side-item">Products</Link>
         <Link to="/admin/add" className="list-group-item list-group-item-action bg-side-item">Add to product</Link>
-        <Link to="/admin/feedbacks" className="list-group-item list-group-item-action bg-side-item">Feedbacks</Link>
         <Link to="/admin/medias" className="list-group-item list-group-item-action bg-side-item">Gallary</Link>
-        <Link to="/admin/members" className="list-group-item list-group-item-action bg-side-item">Members</Link>
-        <Link to="/admin/allsugestions" className="list-group-item list-group-item-action bg-side-item">ViewSugestions</Link>
+        <Link to="/admin/settings" className="list-group-item list-group-item-action bg-side-item">Settings</Link>
       </div>
       </div>
 

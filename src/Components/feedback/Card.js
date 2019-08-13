@@ -4,8 +4,8 @@ const Card=(props)=>{
 	const card =props.feedbacks.map((val,i)=> (
 		<div  
 		key={val._id} 
-		className = "rounded  pa1 center  mb5 pointer" 
-		style={{ width:300, height:"auto",backgroundColor:'#9e1061',color:'white' }}>
+		className = "rounded  pa1 center  mb3 pointer" 
+		style={styles.card}>
 			<p className='tc'>{val.message}</p>
 
 		</div> 
@@ -17,6 +17,16 @@ const Card=(props)=>{
 			</React.Fragment>
 
 		)
+}
+
+
+const styles={
+	card:{
+		width:300, 
+		height:150,
+		backgroundColor:'#9e1061',
+		
+	}
 }
 
 export default withRouter(Card);

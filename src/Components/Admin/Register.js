@@ -25,15 +25,14 @@ class Register extends Component {
 		if(!email || !password) {
 			return this.setState({...this.state,error:true,success:false,isDeleted:false});
         }
-        removeServerError();
+        this.props.removeServerError();
         this.setState({success:true});
 		this.props.Register_user({email,password}).then(()=>{
-            this.setState({...this.state,success:false});
             if(this.props.errorFromServer) {
-                return this.setState({...this.state,error:false,serverErr:true});
+                return this.setState({error:false,serverErr:true,success:false});
             }
-            this.setState({...this.state,error:false,success:true,isDeleted:false});
-			return this.props.history.push('/admin');
+            this.setState({error:false,success:false});
+			this.props.history.push('/admin');
 			
 		})
 			
@@ -106,4 +105,4 @@ return {
 
 
 
-export default withRouter(connect(mapStateToProps,{Register_user}) (Register));
+export default withRouter(connect(mapStateToProps,{Register_user,removeServerError}) (Register));

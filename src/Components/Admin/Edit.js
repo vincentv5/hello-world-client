@@ -5,7 +5,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { confirmAlert } from 'react-confirm-alert'; 
 import {SideNav }from './SideNav';
 import { Update_panel, Delete_panel, removeServerError,getUploads} from '../Store/Action';
-import EditForm from './EditForm';
+import EditForm from './Edits';
  class Edit extends Component {
 	constructor(props) {
  		super(props);
@@ -78,7 +78,7 @@ import EditForm from './EditForm';
 			    if(!title || !description || !stock || !price || !keys || !id) {
 			       return this.setState({error:true,success:false,isDeleted:false,isClicked:false})   
 				}
-				removeServerError();
+				this.props.removeServerError();
 			    this.props.Update_panel({title,description,stock,price,keys,file,id})
 			    .then(()=>{
 					if(this.props.errorFromServer) {
@@ -255,4 +255,4 @@ function mapStateToProps(state){
 	}
 }
 
-export default withRouter(connect(mapStateToProps,{Update_panel,Delete_panel,getUploads})(Edit));
+export default withRouter(connect(mapStateToProps,{Update_panel,Delete_panel,getUploads,removeServerError})(Edit));

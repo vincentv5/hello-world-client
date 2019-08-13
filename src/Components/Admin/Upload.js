@@ -64,9 +64,12 @@ const base_url = "http://localhost:3001";
         this.props.deleteUploads(this.state.file)
         .then(()=> {
             this.props.getUploads().then(()=>{
-                this.setState({
-               file:'',
-            })
+        
+                    this.setState({
+                     file:'',
+                    })
+              
+                
             })
             
         })
@@ -90,7 +93,7 @@ const base_url = "http://localhost:3001";
                 <SideNav />
                 <div style={{flex:"1"}}>
                     <div className="Container main">
-                        <div className="styling1 mt5">
+                        <div className="styling1">
                             <ImageUploader
                                 withIcon={true}
                                 buttonText='Choose images'

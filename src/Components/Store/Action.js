@@ -96,7 +96,11 @@ export const removeServerError=()=>dispatch=> {
 }
 export const Register_user=data=>dispatch=>{
 	return axios.post(`${base_url}/user/register`,data).then((res)=> {
-		console.log(res);
+		if(res.status === 200) {
+			return dispatch({
+				type :"IS_USER",
+			})
+		}
 	}).catch((err)=> HandleError(true));
 }
 
@@ -109,13 +113,15 @@ export const Get_panels=()=>dispatch=> {
 export const CoinbaseApiCall=(data)=>dispatch=>{
 	return axios.post(`${base_url}/charges`,data)
 	.then((res)=> {
-		if(res.status === 200) {
+		if(res.status===200) {
 		const results =res.data;
 		const isCrypto=data.isCrypto;
 		return dispatch(coinbase({results,isCrypto}))
+		   
 		}
-		
+
 		HandleError(true)
+		
 		
 	})
 	.catch((err)=>HandleError(true))
@@ -223,3 +229,84 @@ export const deleteUploads=(data)=>dispatch=> {
 	})
 }
 
+
+export const Reply_feedback=(message,email)=> {
+	return axios.post(`${base_url}/feedback/reply`,{message,email})
+	.then(res=>console.log)
+	.catch(err=>HandleError(true)) 
+}
+
+export const Reply_contact=(message,email)=> {
+	return axios.post(`${base_url}/contact/reply`,{message,email})
+	.then(res=>console.log)
+	.catch(err=>HandleError(true)) 
+}
+
+
+export const deleteBulkContact=(ids)=>dispatch=> {
+	return axios.post(`${base_url}/contact/bulk`,ids)
+	.then((res)=>{
+		if(res.status ===200) {
+			return dispatch({
+				type:"BULK_CONTACT_DELETE",
+				data:res.data
+			})
+
+		}else {
+			HandleError(true);
+		}
+
+	}).catch((err)=> HandleError(true))
+}
+
+
+
+export const deleteSingleContact=(id)=>dispatch=> {
+	return axios.delete(`${base_url}/contact/${id}`)
+	.then((res)=>{
+		if(res.status ===200) {
+			return dispatch({
+				type:"SINGLE_CONTACT_DELETE",
+				data:res.data
+			})
+
+		}else {
+			HandleError(true);
+		}
+
+	}).catch((err)=>HandleError(true))
+}
+
+
+export const deleteBulkFeedback=(ids)=>dispatch=> {
+	return axios.post(`${base_url}/feedback/bulk`,ids)
+	.then((res)=>{
+		if(res.status ===200) {
+			return dispatch({
+				type:"BULK_FEEDBACK_DELETE",
+				data:res.data
+			})
+
+		}else {
+			HandleError(true);
+		}
+
+	}).catch((err)=>HandleError(true))
+}
+
+
+export const deleteSingleFeedback=(id)=>dispatch=> {
+	return axios.post(`${base_url}/feedback/${id}`)
+	.then((res)=>{
+		if(res.status ===200) {
+			return dispatch({
+				type:"SINGLE_FEEDBACK_DELETE",
+				data:res.data
+			})
+
+		}else {
+			HandleError(true);
+		}
+
+	}).catch((err)=>HandleError(true))
+}

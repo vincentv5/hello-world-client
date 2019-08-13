@@ -24,7 +24,7 @@ class Login extends Component {
 		if(!email || !password) {
 			return this.setState({...this.state,error:true,success:false,isDeleted:false});
 		}
-		removeServerError();
+		this.props.removeServerError();
 		this.setState({
 			...this.state,
 			success:true,
@@ -43,7 +43,7 @@ class Login extends Component {
 				Remember_token();
 			}
 			this.setState({...this.state,error:false,isDeleted:false,success:false});
-			return this.props.history.push('/admin/products');
+			return this.props.history.push('/admin/dashboard');
 			
 		});
 		
@@ -131,4 +131,4 @@ return {
 }
 
 
-export default withRouter(connect(mapStateToProps,{Login_user}) (Login));
+export default withRouter(connect(mapStateToProps,{Login_user,removeServerError}) (Login));

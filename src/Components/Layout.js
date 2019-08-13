@@ -4,7 +4,8 @@ import Products from './Products/Products';
 import AdminProducts from './Admin/Products';
 import Upload from './Admin/Upload';
 import Details from './Payment/Details';
-import AdminFeedbacks from './Admin/AdminFeedbacks';
+// import AdminFeedbacks from './Admin/AdminFeedbacks';
+// import AdminContact from './Admin/AdminContact';
 import Payment from './Payment/Payment';
 import Paypal from './Payment/Paypal';
 import Login from './Admin/Login';
@@ -13,13 +14,18 @@ import SendFeedback from './SendFeedback';
 import Footer from './Footer';
 import AddProduct from './Admin/AddProduct';
 import Edit from './Admin/Edit';
+import Dashboard from './Admin/Dashboard';
 import IsAthenticated from './IsAthenticated';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch,Redirect } from 'react-router-dom';
 import '../index.css';
 import { Get_panels} from './Store/Action';
 import Contact from './Contact';
 import Feedback from './feedback';
 import { connect } from 'react-redux';
+import NotFound from "./NotFound";
+import Setting from "./Admin/Setting";
+
+
 class Layout extends Component {
 	constructor() {
 		super()
@@ -53,12 +59,14 @@ class Layout extends Component {
 				<Route  path='/admin/add' component={IsAthenticated(AddProduct)} />
 				<Route  path='/admin/:id/edit' component={IsAthenticated(Edit)} />
 				<Route  path='/contact' component={Contact } />
-				<Route  path='/admin/feedbacks' component={AdminFeedbacks} />
+				<Route  path='/admin/dashboard' component={IsAthenticated(Dashboard)} />
+				<Route  path='/admin/settings' component={IsAthenticated(Setting)} /> 
 				<Route  path='/feedbacks' component={Feedback } />
 				<Route  path='/admin/medias' component={Upload} />
 				<Route  path='/register' component={Register } />
 				<Route  path='/feedback' component={SendFeedback} />
 				<Route  path='/admin' component={()=><Login />} />
+				<Route path="*" render={() => <NotFound />}/>
 				</Switch>
 				<Footer />
 			</div>

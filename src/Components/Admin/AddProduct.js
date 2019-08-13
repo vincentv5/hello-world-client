@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Create_panel,removeServerError,getUploads} from '../Store/Action';
-import AddForm from './AddForm';
+import AddForm from './Add';
 import { SideNav } from './SideNav';
 
 class AddProduct extends Component {
@@ -25,8 +25,11 @@ class AddProduct extends Component {
  	}
 
 		componentDidMount() {
+			this.props.removeServerError();
 			 this.props.getUploads().then(()=> {
-               this.setState({...this.state,isImage:true}); 
+			 	if(this.props.errorFromServer)
+               		return this.setState({isImage:false}); 
+               	return this.setState({isImage:true})
             })
 		}
 
@@ -162,4 +165,4 @@ const mapStateToProps=(state)=> {
 	}
 }
 
-export default connect(mapStateToProps,{Create_panel,getUploads})(AddProduct);
+export default connect(mapStateToProps,{Create_panel,getUploads,removeServerError})(AddProduct);
