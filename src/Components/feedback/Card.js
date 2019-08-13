@@ -1,7 +1,7 @@
 import React from 'react';
 import {withRouter } from 'react-router-dom';
 const Card=(props)=>{
-	const card =props.feedbacks.map((val,i)=> (
+	const card =props.feedbacks?props.feedbacks.map((val,i)=> (
 		<div  
 		key={val._id} 
 		className = "rounded  pa1 center  mb3 pointer" 
@@ -9,7 +9,7 @@ const Card=(props)=>{
 			<p className='tc'>{val.message}</p>
 
 		</div> 
-))
+)):'';
 
 	return (
 			<React.Fragment>
