@@ -9,7 +9,7 @@ const Card=(props)=>{
 			<p className='tc'>{val.message}</p>
 
 		</div> 
-)):'';
+)):''; 
 
 	return (
 			<React.Fragment>

@@ -7,6 +7,7 @@ constructor(props) {
  		this.state={
  			email:'',
  			message:'',
+ 			name:'',
  			error:false,
 			serverErr:false,
             success:false,

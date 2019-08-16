@@ -16,7 +16,7 @@ import AddProduct from './Admin/AddProduct';
 import Edit from './Admin/Edit';
 import Dashboard from './Admin/Dashboard';
 import IsAthenticated from './IsAthenticated';
-import { Route, Switch,Redirect } from 'react-router-dom';
+import { Route, Switch} from 'react-router-dom';
 import '../index.css';
 import { Get_panels} from './Store/Action';
 import Contact from './Contact';

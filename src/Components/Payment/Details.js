@@ -148,13 +148,15 @@ constructor(props){
 		}
 		
 		handleDanamic=()=> {
+			let view=null;
 			const alertMessage = this.state.err?{border:'2px solid red'}:{border:''};
-			switch(this.state.toggle) {
+			 switch(this.state.toggle) {
 				case 'button':
-				return (<button onClick={this.handleChange} className='btn form-control' style={styles.button}>purchase</button>);
+				view=(<button onClick={this.handleChange} className='btn form-control' style={styles.button}>purchase</button>);
 				break;
+
 				case 'crypto':
-				return ((<Cryptos 
+				view= ((<Cryptos 
 					span1={styles.span1} 
 					span2={styles.span2} 
 					spanDiv={styles.spanDiv}
@@ -164,7 +166,7 @@ constructor(props){
 				break;
 
 				case 'continueCrypto':
-				return (<div>
+				view= (<div>
 					<label htmlFor ='email'>Email address</label>
 					<input 
 					onFocus ={this.handlefocus} 
@@ -194,11 +196,11 @@ constructor(props){
 				break;
 
 				case 'rejectCrypto':
-				return (<button onClick={this.handleChange} className='btn form-control' style={styles.button}>purchase</button>);
+				view=(<button onClick={this.handleChange} className='btn form-control' style={styles.button}>purchase</button>);
 				break;
 
 				case 'moveBackToCrypto':
-				return (<Cryptos 
+				view=(<Cryptos 
 					span1={styles.span1} 
 					span2={styles.span2} 
 					spanDiv={styles.spanDiv}
@@ -211,6 +213,8 @@ constructor(props){
 				return '';
 
 			}
+
+			return view;
 		}
 
 render() {

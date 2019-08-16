@@ -9,8 +9,8 @@ import {
 	logout,
 	get_panels,
 	coinbase
-
 }
+
 from './ActionsCreator';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
@@ -138,8 +138,10 @@ export const Contact_us=(data)=>dispatch=>{
 	return axios.post(`${base_url}/contact`,data)
 	.then((res)=>{
 		if(res.status === 200){
-			return dispatch(true)
+			return true;
 		} 
+
+		HandleError(true);
 			
 	})
 	.catch((err)=>HandleError(true));
@@ -230,27 +232,25 @@ export const deleteUploads=(data)=>dispatch=> {
 }
 
 
-export const Reply_feedback=(message,email)=> {
-	return axios.post(`${base_url}/feedback/reply`,{message,email})
-	.then(res=>console.log)
-	.catch(err=>HandleError(true)) 
-}
-
-export const Reply_contact=(message,email)=> {
+export const Reply_contact=(message,email)=>dispatch=> {
 	return axios.post(`${base_url}/contact/reply`,{message,email})
-	.then(res=>console.log)
+	.then(res=>{
+		if(res.status ===200) {
+			return true;
+		}else {
+
+			HandleError(true);
+		}
+	})
 	.catch(err=>HandleError(true)) 
 }
 
 
 export const deleteBulkContact=(ids)=>dispatch=> {
-	return axios.post(`${base_url}/contact/bulk`,ids)
+	return axios.post(`${base_url}/contact/bulk`,{ids})
 	.then((res)=>{
 		if(res.status ===200) {
-			return dispatch({
-				type:"BULK_CONTACT_DELETE",
-				data:res.data
-			})
+			return true;
 
 		}else {
 			HandleError(true);
@@ -265,10 +265,7 @@ export const deleteSingleContact=(id)=>dispatch=> {
 	return axios.delete(`${base_url}/contact/${id}`)
 	.then((res)=>{
 		if(res.status ===200) {
-			return dispatch({
-				type:"SINGLE_CONTACT_DELETE",
-				data:res.data
-			})
+			return true;
 
 		}else {
 			HandleError(true);
@@ -279,13 +276,12 @@ export const deleteSingleContact=(id)=>dispatch=> {
 
 
 export const deleteBulkFeedback=(ids)=>dispatch=> {
-	return axios.post(`${base_url}/feedback/bulk`,ids)
+
+	return axios.post(`${base_url}/feedback/bulk`,{ids})
 	.then((res)=>{
+		console.log(res.data);
 		if(res.status ===200) {
-			return dispatch({
-				type:"BULK_FEEDBACK_DELETE",
-				data:res.data
-			})
+			return true;
 
 		}else {
 			HandleError(true);
@@ -296,17 +292,99 @@ export const deleteBulkFeedback=(ids)=>dispatch=> {
 
 
 export const deleteSingleFeedback=(id)=>dispatch=> {
-	return axios.post(`${base_url}/feedback/${id}`)
+	return axios.delete(`${base_url}/feedback/${id}`)
 	.then((res)=>{
 		if(res.status ===200) {
-			return dispatch({
-				type:"SINGLE_FEEDBACK_DELETE",
-				data:res.data
-			})
+			return true;
 
 		}else {
 			HandleError(true);
 		}
 
 	}).catch((err)=>HandleError(true))
+}
+
+
+export const feedbackUpdateBulk=(ids)=>dispatch=> {
+	return axios.post(`${base_url}/feedback/update/bulk`,{ids})
+	.then((res)=>{
+		if(res.status ===200) {
+			return true
+		}else {
+			HandleError(true);
+		}
+
+	}).catch((err)=>HandleError(true))
+}
+
+
+export const feedbackUpdateSingle=(id)=>dispatch=> {
+	return axios.patch(`${base_url}/feedback/${id}`)
+	.then((res)=>{
+		if(res.status ===200) {
+			return true
+		}else {
+			HandleError(true);
+		}
+
+	}).catch((err)=>HandleError(true))
+}
+
+
+
+
+
+export const ReplyFeedback=(message,email)=>dispatch=>{
+	return axios.post(`${base_url}/feedback/reply`,{message,email})
+	.then((res)=>{
+		if(res.status ===200) {
+			return true
+		}else {
+			HandleError(true);
+		}
+
+	}).catch((err)=>HandleError(true))
+}
+
+
+
+
+export const ReplyContact=(message,id)=> {
+	return axios.post(`${base_url}/contact/reply`,{message,id})
+	.then((res)=>{
+		if(res.status ===200) {
+			return true
+		}else {
+			HandleError(true);
+		}
+
+	}).catch((err)=>HandleError(true))
+
+}
+
+
+export const contactUpdateBulk=(ids)=>dispatch=>{
+	return axios.post(`${base_url}/contact/update/bulk`,{ids})
+	.then((res)=>{
+		if(res.status ===200) {
+			return true
+		}else {
+			HandleError(true);
+		}
+
+	}).catch((err)=>HandleError(true))
+
+}
+
+export const contactUpdateSingle=(id)=>dispatch=>{
+return axios.patch(`${base_url}/contact/${id}`)
+	.then((res)=>{
+		if(res.status ===200) {
+			return true
+		}else {
+			HandleError(true);
+		}
+
+	}).catch((err)=>HandleError(true))
+
 }

@@ -50,7 +50,7 @@ class AddProduct extends Component {
 		if(!title || !description || !stock || !price || !keys) {
 			return this.setState({...this.state,error:true,success:false});	
 		}
-		removeServerError();
+		this.props.removeServerError();
 		this.props.Create_panel({title,description,stock,price,keys,file}).then(()=>{
 			if(this.props.errorFromServer){
 				return this.setState({

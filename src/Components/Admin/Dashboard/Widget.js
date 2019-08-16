@@ -5,7 +5,7 @@ const Widget = (props) => {
 	return (
 		<div className=" mt5">
 		<div className="row">
-            <div className=" col-sm-4">
+            <div className=" col-sm-3">
                 <div className="card mb-4 bg-primary">
                     <div className="card-body">
                         <div className="media d-flex align-items-center">
@@ -13,7 +13,7 @@ const Widget = (props) => {
                                 <i className="vl_download"></i>
                             </div>
                             <div className="media-body text-white">
-                                <h4 className="text-uppercase mb-0 weight500">{products.length?products.length:""}</h4>
+                                <h4 className="text-uppercase mb-0 weight500">{products?products.length:""}</h4>
                                 <span>Products</span>
                             </div>
                         </div>
@@ -21,7 +21,7 @@ const Widget = (props) => {
                 </div>
             </div>
 
-            <div className="col-sm-4">
+            <div className="col-sm-3">
                 <div className="card mb-4 bg-danger">
                     <div className="card-body">
                         <div className="media d-flex align-items-center">
@@ -29,7 +29,7 @@ const Widget = (props) => {
                                 <i className="vl_shopping-bag2"></i>
                             </div>
                             <div className="media-body text-white">
-                                <h4 className="text-uppercase mb-0 weight500">{feedbacks.length}</h4>
+                                <h4 className="text-uppercase mb-0 weight500">{feedbacks?feedbacks.length:""}</h4>
                                 <span>Feedbacks</span>
                             </div>
                         </div>
@@ -37,7 +37,7 @@ const Widget = (props) => {
                 </div>
             </div>
 
-            <div className=" col-sm-4">
+            <div className=" col-sm-3">
                 <div className="card mb-4 bg-success">
                     <div className="card-body">
                         <div className="media d-flex align-items-center">
@@ -45,8 +45,24 @@ const Widget = (props) => {
                                 <i className="vl_cart-empty"></i>
                             </div>
                             <div className="media-body text-white">
-                                <h4 className="text-uppercase mb-0 weight500">{contacts.length}</h4>
+                                <h4 className="text-uppercase mb-0 weight500">{contacts?contacts.length:""}</h4>
                                 <span>Contacts</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+
+          <div className=" col-sm-3">
+                <div className="card mb-4 bg-success">
+                    <div className="card-body">
+                        <div className="media d-flex align-items-center">
+                            <div className="mr-4 rounded-circle bg-white sr-icon-box text-success">
+                                <i className="vl_cart-empty"></i>
+                            </div>
+                            <div className="media-body text-white">
+                                <h4 className="text-uppercase mb-0 weight500">{contacts?contacts.length:""}</h4>
+                                <span>Sales</span>
                             </div>
                         </div>
                     </div>

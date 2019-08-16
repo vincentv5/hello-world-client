@@ -10,13 +10,17 @@ class Coinbase extends Component{
 			intervalId:null,
 			mins:'',
 			secs:'',
-			timeElapse:false
+			timeElapse:false,
+			endDate:null
 		}
 
 	}
 	componentDidMount() {
 		window.clearInterval(this.state.intervalId);
 		if(this.props.isCoinbase) {
+			this.setState({
+				endDate:this.props.coinbaseInfo.expires_at
+			})
 		const intervalId= setInterval(this.timer,1000);
 		this.setState({
 			...this.state,
@@ -33,10 +37,10 @@ class Coinbase extends Component{
 	}
 
 	timer=()=> {
-		let endDate = new Date(this.props.coinbaseInfo.expires_at).getTime();
 		 let now = new Date().getTime();
-		 let t = endDate - now;
-				if (t >= 0) {
+		 let endDate = new Date(this.state.endDate).getTime();
+		     let t =endDate-now;
+				if (t>=0) {
 			        let mins = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
 			        let secs = Math.floor((t % (1000 * 60)) / 1000);
 			       this.setState({

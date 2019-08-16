@@ -6,11 +6,25 @@ import Feedback from "./Settings/Feedback";
 import ProductSales from "./Settings/ProductSales";
 import Profile from "./Settings/Profile";
 import {connect} from "react-redux";
+import { confirmAlert } from 'react-confirm-alert'; 
+
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
+
 import { 
 	deleteSingleFeedback,
 	deleteBulkContact,
 	deleteSingleContact,
-	deleteBulkFeedback 
+	deleteBulkFeedback,
+	Get_feedbacks,
+	Get_contacts,
+	feedbackUpdateBulk,
+	feedbackUpdateSingle,
+	ReplyFeedback,
+	Reply_contact,
+	contactUpdateBulk,
+	contactUpdateSingle,
+	removeServerError,
+
 } from "../Store/Action";
 
 
@@ -20,13 +34,22 @@ constructor(props) {
 	this.state={
 		component:null,
 		view:null,
-		reply:null,
-		boxChecked:false
+		boxChecked:false,
+		message:"",
+		replyId:null,
+		res:null,
+		
 
 	}
 }
 
 componentDidMount() {
+	this.props.Get_contacts().then(()=> {
+	
+	})
+	this.props.Get_feedbacks().then(()=> {
+		
+	})
 	this.setState({component:"contact"})
 } 
 
@@ -50,104 +73,291 @@ handleCheckBoxes=(e)=> {
 }
 
 
+
+
+//all contact events goes below there//
+handleContactSingleDelete=(e)=> {
+		if(e.target.id) {
+		const id =e.target.id;
+		this.props.deleteSingleContact(id).then(()=> {
+			this.props.Get_contacts().then(()=> {
+				
+			})
+
+		})
+	}
+
+}
+
+handleContactView=(e)=> {
+	const id =e.target.id;
+	if(id){
+		let ms =null;
+		this.props.contact_message.map((val)=>val._id===id?ms=val.message:null);
+		if(ms)
+			this.setState({
+			view:ms
+			})
+		this.props.contactUpdateSingle(id).then(()=>{
+			this.props.Get_contacts().then(()=> {});
+		})
+	}
+
+}
+
 handleReadAllContact=()=> {
-	let id = [];
+	let ids = [];
 	let boxes = document.getElementsByClassName("box");
 	if(this.state.boxChecked) {
 		for(let i=0; i<boxes.length; i++) {
-			id.push(boxes[i].id);
+			ids.push(boxes[i].id);
 		}
-	}else {
-		alert("this cant take place");
+	}
+
+	if(ids.length) {
+		this.props.contactUpdateBulk(ids).then(()=>{
+			this.props.Get_contacts().then(()=> {})
+		})
 	}
 	
 }
 
 handleSingleReadContact=(e)=> {
-	alert(e.target.id)
-}
-
-handleReadAllFeedback=()=> {
-	let id = [];
-	let boxes = document.getElementsByClassName("box");
-	if(this.state.boxChecked) {
-		for(let i=0; i<boxes.length; i++) {
-			id.push(boxes[i].id);
-		}
-	}else {
-		alert("this cant take place");
+	const id =e.target.id;
+	if(id) {
+		this.props.contactUpdateSingle(id).then(()=>{
+			this.props.Get_contacts().then(()=> {});
+		})
 	}
-	console.log(id);
 }
 
-handleSingleReadFeedback=(e)=> {
-	alert(e.target.id)
-
-}
 
 
 
 handleContactBulkDelete=()=> {
-	let id = [];
-	let boxes = document.getElementsByClassName("box");
-	if(this.state.boxChecked) {
-		for(let i=0; i<boxes.length; i++) {
-			id.push(boxes[i].id);
-			
-		}
-	}else {
-		alert("this cant take place");
-	}
+confirmAlert({
+    message: `are sure you want to perform this task.
+    Note:this task is not reversible`,
+    buttons: [
+      {
+        label: 'Yes',
+        onClick: () => {
+			let ids = [];
+			let boxes = document.getElementsByClassName("box");
+			if(this.state.boxChecked) {
+				for(let i=0; i<boxes.length; i++) {
+					ids.push(boxes[i].id);
+				}
+			}else {
+
+				return;
+			}
+			if(ids.length){
+				this.props.deleteBulkContact(ids).then(()=> {
+					this.props.Get_contacts().then(()=> {});
+				})
+			}
+        }
+      },
+      {
+        label: 'No',
+        onClick: () =>false
+      }
+    ],
+   
+  });
+
 	
 }
 
-handleContactSingleDelete=(e)=> {
-	e.preventDefault();
-	alert(e.target.id)
 
+handleSubmitReplyContact=()=> {
+	const message=this.state.message;
+	const id = this.state.replyId;
+	if(message && id) {
+		this.props.removeServerError();
+		this.props.Reply_contact(message,id).then(()=>{
+			if(!this.props.errorFromServer) {
+			return this.setState({
+				message:"",
+				replyId:null,
+				res:"success",
+			})
+		}else {
+			return this.setState({
+				res:"failed",
+			})
+		}
+		})					
+	}
 }
 
-handleFeedbackSingleDelete=(e)=> {
-	alert(e.target.id);
-}
 
-handleFeedbackDeleteBulk=()=> {
-let id = [];
+
+//all feedback event goes below !!!!!
+
+
+handleReadAllFeedback=()=> {
+	let ids = [];
 	let boxes = document.getElementsByClassName("box");
 	if(this.state.boxChecked) {
 		for(let i=0; i<boxes.length; i++) {
-			id.push(boxes[i].id);
+			ids.push(boxes[i].id);
 		}
-	}else {
-		alert("this cant take place");
 	}
-	console.log(id);
+
+	if(ids.length) {
+		this.props.feedbackUpdateBulk(ids).then(()=>{
+			this.props.Get_feedbacks().then(()=> {})
+		})
+	}
 }
 
-handleView=(e)=> {
-	this.setState({view:e.target.id})
+handleSingleReadFeedback=(e)=> {
+	const id =e.target.id;
+	if(id) {
+		this.props.feedbackUpdateSingle(id).then(()=>{
+			this.props.Get_feedbacks().then(()=> {});
+		})
+	}
+
 }
 
+
+
+
+handleFeedbackSingleDelete=(e)=> {
+	if(e.target.id) {
+		const id =e.target.id;
+		this.props.deleteSingleFeedback(id).then(()=> {
+			this.props.Get_feedbacks().then(()=> {
+				
+			})
+
+		})
+	}
+
+}
+
+
+
+
+handleFeedbackDeleteBulk=()=> {
+confirmAlert({
+    message: `are sure you want to perform this task.
+    Note:this task is not reversible`,
+    buttons: [
+      {
+        label: 'Yes',
+        onClick: () => {
+			let ids = [];
+			let boxes = document.getElementsByClassName("box");
+			if(this.state.boxChecked) {
+				for(let i=0; i<boxes.length; i++) {
+					ids.push(boxes[i].id);
+				}
+			}else {
+				return;
+			}
+
+			if(ids.length){
+				this.props.deleteBulkFeedback(ids).then(()=> {
+					this.props.Get_feedbacks().then(()=> {})
+				})
+			}
+        }
+      },
+      {
+        label: 'No',
+        onClick: () =>false
+      }
+    ],
+   
+  });
+
+}
+
+
+
+
+handleFeedbackView=(e)=> {
+	const id =e.target.id;
+	if(id){
+		let ms =null;
+		this.props.feedback_message.map((val)=>val._id===id?ms=val.message:null);
+		if(ms)
+			this.setState({
+			view:ms
+			})
+		this.props.feedbackUpdateSingle(id).then(()=>{
+			this.props.Get_feedbacks().then(()=> {});
+		})
+	}
+}
+
+
+
+
+handleSubmitReplyFeedback=()=> {
+	const message=this.state.message;
+	const id = this.state.replyId;
+	if(message && id) {
+	this.props.removeServerError();
+	this.props.ReplyFeedback(message,id).then(()=> {
+	if(!this.props.errorFromServer) {
+			return this.setState({
+				message:"",
+				replyId:null,
+				res:"success",
+			})
+		}else {
+			return this.setState({
+				res:"failed",
+			})
+		}
+	})
+						
+	}
+}
+
+
+//feedback ends here//
+
+
+//handlechange for both feedback and contact
 handleReply=(e)=> {
-this.setState({reply:e.target.id})
+	this.setState({
+		res:null,
+		replyId:e.target.id
+	})
 }
 
+handleChangeData=(e)=> {
+	this.setState({
+		message:e.target.value
+	})
+}
+
+
+
+
+
+//component changing handle///
 handleChange=(e)=> {
 	this.setState({component:e.target.id})
 }
 
-handleSubmit=(e)=> {
-alert(this.state.reply);
-}
+
 	render() {
 		let component=null;
 		if(this.state.component ==="contact"){
 			component=(<Contact 
-				handleView={this.handleView}
+				handleContactView={this.handleContactView}
 				view={this.state.view}
-				reply={this.state.reply}
+				response={this.state.res}
+				handleChangeData={this.handleChangeData}
 				handleReply={this.handleReply}
-				handleSubmit={this.handleSubmit}
+				handleSubmitReplyContact={this.handleSubmitReplyContact}
 				handleCheckBoxes={this.handleCheckBoxes}
 				handleContactBulkDelete={this.handleContactBulkDelete}
 				handleContactSingleDelete={this.handleContactSingleDelete}
@@ -156,11 +366,13 @@ alert(this.state.reply);
 				/>);
 		}else if(this.state.component ==="feedback"){
 			component=(<Feedback
-				handleView={this.handleView}
+				message={this.state.message}
+				response={this.state.res}
+				handleFeedbackView={this.handleFeedbackView}
 				view={this.state.view}
-				reply={this.state.reply}
 				handleReply={this.handleReply}
-				handleSubmit={this.handleSubmit}
+				handleSubmitReplyFeedback={this.handleSubmitReplyFeedback}
+				handleChangeData={this.handleChangeData}
 				handleCheckBoxes={this.handleCheckBoxes} 
 				handleFeedbackSingleDelete={this.handleFeedbackSingleDelete}
 				handleFeedbackDeleteBulk={this.handleFeedbackDeleteBulk}
@@ -172,19 +384,7 @@ alert(this.state.reply);
 		}else if(this.state.component ==="profile"){
 			component=(<Profile />);
 		}else if(this.state.component ===null){
-			component=(<Contact 
-				handleView={this.handleView}
-				view={this.state.view}
-				reply={this.state.reply}
-				handleReply={this.handleReply}
-				handleSubmit={this.handleSubmit}
-				handleCheckBoxes={this.handleCheckBoxes}
-				handleContactBulkDelete={this.handleContactBulkDelete}
-				handleContactSingleDelete={this.handleContactSingleDelete}
-				handleReadAllContact={this.handleReadAllContact}
-				handleSingleReadContact={this.handleSingleReadContact}
-
-				/>);
+			component=null;
 		}else {
 			component='';
 		}
@@ -206,11 +406,26 @@ alert(this.state.reply);
 		);
 	}
 }
+const mapStateToProps=(state)=> {
+return {
+	feedback_message:state.feedbacks,
+	contact_message:state.contacts,
+	errorFromServer:state.isError,
 
-
-export default  connect(null,{
+}
+}
+export default  connect(mapStateToProps,{
 	deleteSingleFeedback,
 	deleteBulkContact,
 	deleteSingleContact,
-	deleteBulkFeedback 
+	deleteBulkFeedback ,
+	Get_feedbacks,
+	Get_contacts,
+	feedbackUpdateBulk,
+	feedbackUpdateSingle,
+	ReplyFeedback,
+	Reply_contact,
+	contactUpdateBulk,
+	contactUpdateSingle,
+	removeServerError
 })(Setting);

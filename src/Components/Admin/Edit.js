@@ -34,6 +34,7 @@ import EditForm from './Edits';
                this.setState({...this.state,isImage:true}); 
             });
 	 	const panel =this.props.panel;
+	 	if(panel){
 	 	if(panel.length!== 0) {
 	 	const idx = this.props.match.params.id;
 	 	const results = panel.filter((val,i)=>val._id === idx );
@@ -50,9 +51,9 @@ import EditForm from './Edits';
  			keys:licensekey,
  			file:image
 	 	})
-	 	}
-	 		
+	 	}		
 	 }
+	}
  		
  	 toggle=()=>{
     this.setState(prevState => ({
@@ -152,7 +153,9 @@ import EditForm from './Edits';
 				   	if(!this.state.id) {
 				   	return this.setState({error:true,success:false,isDeleted:false})
 					   }
-					   removeServerError();
+					   this.props.removeServerError();
+				   	this.setState({isClicked:true});
+					return this.props.Delete_panel(this.state.id).then(()=> {
 					if(this.props.errorFromServer) {
 						return this.setState({
 							...this.state,
@@ -161,8 +164,6 @@ import EditForm from './Edits';
 							serverError:true,
 						})
 					}
-				   	this.setState({isClicked:true});
-					return this.props.Delete_panel(this.state.id).then(()=> {
 				   	this.setState({
 						title:'',
 						description:'',

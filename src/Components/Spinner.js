@@ -4,7 +4,7 @@ import { ClipLoader } from 'react-spinners';
 const override = css`
     display: block;
     margin: 0 auto;
-    border-color: red;
+    border-color: #1c2260;
 `;
  
 const Spinner=(props)=> {

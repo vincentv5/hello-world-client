@@ -1,5 +1,8 @@
 import React from 'react';
- const FormModal=(props)=>{
+ const FeedbackModal=(props)=>{
+  const getResponse=props.response==="success"?(<div className="alert alert-success">reply sent</div>)
+  :props.response==="failed"?(<div className="alert alert-danger">oops reply not sent</div>)
+  :null;
  return (
   <div className="modal fade" id="modalSubscriptionForm" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">
@@ -11,16 +14,17 @@ import React from 'react';
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+        {getResponse}
         <div className="modal-body mx-3">
           <div className="md-form mb-4">
             <i className="fas fa-envelope prefix grey-text"></i>
-            <textarea onChange={props.handleChange}  rows="7"  className="form-control validate" value={props.message}/>
+            <textarea onChange={props.handleChangeData}  rows="7"  className="form-control validate" value={props.message}/>
             <label data-error="wrong" data-success="right" htmlFor="form2">Message</label>
           </div>
 
         </div>
         <div className="modal-footer d-flex justify-content-center">
-          <button style={styles.button}  onClick={props.handleSubmit} className="btn form-control">Send <i className="fas fa-paper-plane-o ml-1"></i></button>
+          <button style={styles.button}  onClick={props.handleSubmitReplyFeedback} className="btn form-control">Send <i className="fas fa-paper-plane-o ml-1"></i></button>
         </div>
       </div>
     </div>
@@ -43,5 +47,5 @@ const styles={
     color:"white",
   }
 }
- export default FormModal;
+ export default FeedbackModal;
 

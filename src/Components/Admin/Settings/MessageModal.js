@@ -38,7 +38,7 @@ const styles={
   },
 
   mrg:{
-    margin:"auto"
+    top:"20px"
   }
 }
  export default MessageModal;

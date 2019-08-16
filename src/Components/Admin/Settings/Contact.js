@@ -1,58 +1,74 @@
 import React from 'react';
 import {connect} from "react-redux";
-import FormModal from '../Patials/FormModal';
+import ContactModal from '../Patials/ContactModal';
 import MessageModal from './MessageModal';
 import FaTrash from 'react-icons/lib/fa/trash';
 import FaAt from 'react-icons/lib/fa/at';
 import FaUser from 'react-icons/lib/fa/user';
-
-
-
-
+import TableRow from './TableRow';
+import TableRow2 from './TableRow2';
 const Contact=(props)=> {
 	const tr = props.contact
-	?props.contact.map((val)=>{
+	?props.contact.sort((a,b)=>{
+		const d1 = new Date(a.createdAt).getTime();
+		const d2 =new Date(b.createdAt).getTime();
+		return d2-d1;
+
+	}).map((val)=>{
+		const now =new Date(val.createdAt);
+		const year =now.getFullYear();
+		const day = now.getDay();
+		const month=now.getMonth();
+		const hour=now.getHours();
+		const mins= now.getMinutes();	    
+	if(!val.isChecked) {
 		return (
-				<tr key={val._id} className="shadow-2 pa3">
-					<td className="td pointer"><h6>{val.email}</h6></td>
-					<td className="td">{val.name}</td>
-					<td style={styles.link} 
-					className="td pointer"   
-					data-toggle="modal" 
-					data-target="#MessageModal" 
-					id={val.message} 
-					onClick={props.handleView}>
-					view
-					</td>
-					<td style={styles.link} 
-					className="td pointer"   
-					data-toggle="modal" 
-					data-target="#modalSubscriptionForm"
-					id={val.email} 
-					onClick={props.handleReply}>
-					reply
-					</td>
-					<td className="td pointer"></td>
-					<td className="td"><input type="checkbox" className="box" id={val._id}/></td>
-					<td className="td"  >
-					<button className="btn btn-danger"  onClick={props.handleContactSingleDelete} id={val._id}>
-						X
-					</button>
-					</td>
-					<td className="td">
-					<input 
-					type="button" 
-					className="btn btn-primary"  
-					value="unread"
-					id={val._id}
-					onClick={props.handleSingleReadContact}
-					/>
-					</td>
-				</tr>
+				<TableRow 
+				key={val._id}
+				id={val._id}
+				bgcolor={styles.bgcolor}
+				email={val.email}
+				name={val.name}
+				link={styles.link}
+				handleView={props.handleContactView}
+				handleReply={props.handleReply}
+				handleSingleDelete={props.handleContactSingleDelete}
+				handleReadContact={props.handleSingleReadContact}
+				month={month}
+				year={year}
+				day={day}
+				hour={hour}
+				mins={mins}
+				target={'#modalSubscriptionForm'}
+				/>
 			)
+	}
+	else {
+		return (
+				<TableRow2 
+				key={val._id}
+				id={val._id}
+				bgcolor2={styles.bgcolor2}
+				email={val.email}
+				name={val.name}
+				link={styles.link}
+				handleContactView={props.handleContactView}
+				handleReply={props.handleReply}
+				handleContactSingleDelete={props.handleContactSingleDelete}
+				handleSingleReadContact={props.handleSingleReadContact}
+				month={month}
+				year={year}
+				day={day}
+				hour={hour}
+				mins={mins}
+				target={'#modalSubscriptionForm'}
+				/>
+			)
+	}
 	}):null;
+
+
 	return (
-		
 		<div className="table-responsive">
 		  <table className="table">
 		  <thead>
@@ -72,7 +88,7 @@ const Contact=(props)=> {
 				<th className="th">
 					<input type="button" 
 					className="btn btn-primary"  
-					value="unread"
+					value="mark all as read"
 					onClick={props.handleReadAllContact}
 					
 					/>
@@ -83,7 +99,7 @@ const Contact=(props)=> {
 				{tr}
 			 </tbody>
 		  </table>
-		  <FormModal {...props} />
+		  <ContactModal {...props} />
 			<MessageModal {...props}/>
 		</div>
 		)
@@ -104,9 +120,16 @@ const styles={
 		fontSize:"25px",
 		fontWeight:"bold"
 	},
-	tr:{
+bgcolor:{
+	backgroundColor:"#ebe8e8",
+	
 
-	}
+},
+bgcolor2:{
+	backgroundColor:"white",
+	
+
+}
 }
 export default connect(mapStateToProps,null)(Contact);
 

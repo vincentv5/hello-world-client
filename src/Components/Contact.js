@@ -6,6 +6,7 @@ import { Contact_us,removeServerError } from './Store/Action';
 	constructor(props) {
  		super(props);
  		this.state={
+ 			name:'',
  			email:'',
  			message:'',
  			error:false,
@@ -65,9 +66,9 @@ import { Contact_us,removeServerError } from './Store/Action';
 		const { name , email, message} = this.state;
 		const error = this.state.error;
 		const err = error ? 'danger' : ''
-		const errMessage = error ? (<div className='col-sm-7 m-auto alert alert-danger'>all fields are required</div>)  : ''
-		const success = this.state.success?(<div className='col-sm-7 m-auto alert alert-success'>you message has been sent !</div>): '';
-		const serverErr = this.state.serverErr?(<div className='col-sm-7 m-auto alert alert-success'>ooopss something went trying to contact <br /> please trying again !</div>): '';
+		const errMessage = error ? (<div className='tc col-sm-7 m-auto alert alert-danger'>all fields are required</div>)  : ''
+		const success = this.state.success?(<div className='tc col-sm-7 m-auto alert alert-success'>you message has been sent !</div>): '';
+		const serverErr = this.state.serverErr?(<div className='col-sm-7 m-auto alert alert-success tc'>ooopss something went trying to contact <br /> please trying again !</div>): '';
 		return (
 			<div>
 			<br />

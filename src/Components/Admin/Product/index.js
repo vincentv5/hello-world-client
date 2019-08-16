@@ -6,10 +6,11 @@ import { Link, withRouter } from 'react-router-dom';
 const Card =(props)=> {
 		//mapping through panels and dispplaying thenm all
 	const panel =props.panel.map((val,i)=> {
+		console.log(val.image);
 		return (
-		<Link key={val._id} className = "links2 pa2 center pb3  grow   mb1 pointer" style={{ width:250, height:"auto" }}  to={`/admin/${val._id}/edit`}>
-			<div className=' panel-image'>
-				<img alt="" src={val.image} style ={{width:250, height:100}}/>
+		<Link key={val._id} className = "links2 pa2 center pb3  grow   mb1 pointer" style={{ width:250, height:"100" }}  to={`/admin/${val._id}/edit`}>
+			<div className='panel-image'>
+				<img alt="" src={val.image?val.image:""} style ={{width:250, height:100}}/>
 			</div>
 			<br />
 			<h6 className='font tc'>{val.title}</h6>

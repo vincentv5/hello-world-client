@@ -25,9 +25,10 @@ const StoreRoom = {
 }
 
 export default (state=StoreRoom, action)=> {
+	let render=null;
 	switch(action.type) {
 		case CREATE_PANEL:
-		return {
+		render= {
 			...state,
 			data:[...state.data,action.payload]
 		};
@@ -37,7 +38,7 @@ export default (state=StoreRoom, action)=> {
 			let idx =null;
 			state.data.forEach((val,i)=>{if(val._id === action.payload.id) idx=i; return;})
 			if(idx !== null)  state.data.splice(idx,1,action.payload);
-			return{...state,data:state.data} 
+			render= {...state,data:state.data} 
 			 break;
 
 
@@ -45,13 +46,13 @@ export default (state=StoreRoom, action)=> {
 			let id =null;
 			state.data.forEach((val,i)=>{if(val._id === action.payload)id=i; return;});
 			if(id !== null) state.data.splice(id,1);
-			return {...state,data:state.data};
+			render= {...state,data:state.data};
 			break;
 
 
 			case LOGIN:
 
-			return {
+			render= {
 				...state,
 				isAuthenticated:action.payload.body ? true:false ,
 				user:action.payload
@@ -61,7 +62,7 @@ export default (state=StoreRoom, action)=> {
 			break;
 
 			case GETPANELS:
-			return {
+			render= {
 				...state,
 				data:action.payload
 			}
@@ -69,7 +70,7 @@ export default (state=StoreRoom, action)=> {
 
 
 			case LOGOUT:
-			return {
+			render={
 				...state,
 				isAuthenticated:false,
 				user:{}
@@ -77,21 +78,21 @@ export default (state=StoreRoom, action)=> {
 			break;
 
 			case 'ERROR':
-				return {
+				render={
 					...state,
 					isError:action.message
 				}
 				break;
 
 				case 'REMOVE_ERROR':
-					return {
+					render={
 						...state,
 						isError:false
 					}
 					break;
 
 					case CREATE_CHARGE:
-					return {
+					render={
 						...state,
 						isCoinbase:true,
 						coinbase:action.data.results,
@@ -102,7 +103,7 @@ export default (state=StoreRoom, action)=> {
 					break;
 
 					case 'UNMOUNTED':
-						return {
+						render= {
 						...state,
 						isCoinbase:false,
 						coinbase:null,
@@ -111,20 +112,22 @@ export default (state=StoreRoom, action)=> {
 					break;
 
 					case GET_CONTACT:
-					return {
+					render=  {
 						...state,
 						contacts:action.data
 					}
 					break;
 
 					case GET_FEEDBACK:
-					return {
+					render={
 						...state,
 						feedbacks:action.data
 					}
 
+					break;
+
 					case "GET_UPLOADS":
-					return {
+					render={
 						...state,
 						uploadedFiles:action.data
 					}
@@ -135,7 +138,7 @@ export default (state=StoreRoom, action)=> {
 							let path=null;
 							state.uploadedFiles.forEach((val,i)=>{if(val.path === action.data)path=i; return;});
 							if(path !== null) state.uploadedFiles.splice(path,1);
-					     	return {
+					     	render=  {
 					     		...state,
 					     		uploadedFiles:state.uploadedFiles
 					     	}
@@ -143,82 +146,24 @@ export default (state=StoreRoom, action)=> {
 					     	break;
 
 					     	case "IS_USER":
-					     	return {
+					     	render=  {
 					     		...state,
 					     		isUser:true
 					     	}
 
 					     	break;
 
-					     	case "BULK_CONTACT_DELETE":
-					     	const stuff = [];
-					     	let len = state.contacts.length;
-					     	let len2 = action.data.length;
-					     	for(let i =0; i<len; i++) {
-					     		for(let j=0; j<len2; j++) {
+					     	
 
-					     			if(state.contacts[i].email!==action.data[j].email) {
-
-					     				stuff.push(state.contacts[i]);
-					     			}
-					     		}
-					     	}
-					     	return {
-					     		...state,
-					     		contacts:stuff
-					     	} 
-
-					     	break;
-
-					     	case "SINGLE_CONTACT_DELETE":
-					     	return {
-					     		...state,
-					     		contacts:state.contacts.filter((val)=>{
-									if(val.email !== action.data.email){
-										return val;
-									}
-					     		})
-					     	}
-
-					     	break;
-
-					     	case "BULK_FEEDBACK_DELETE":
-					     	const newFeedback = [];
-					     	let ln = state.feedbacks.length;
-					     	let ln2 = action.data.length;
-					     	for(let i =0; i<ln; i++) {
-					     		for(let j=0; j<ln2; j++) {
-
-					     			if(state.feedbacks[i].email!==action.data[j].email) {
-
-					     				newFeedback.push(state.feedbacks[i]);
-					     			}
-					     		}
-					     	}
-					     	return {
-					     		...state,
-					     		feedbacks:newFeedback
-					     	} 
-
-					     	break;
-
-					     	case "SINGLE_FEEDBACK_DELETE":
-					     	return {
-					     		...state,
-					     		feedbacks:state.feedbacks.filter((val)=>{
-									if(val.email !== action.data.email){
-										return val;
-									}
-					     		})
-					     	}
-					     	break;
-
-
+					     	
 
 			default:
 			return state;
+		
 			
 	}
+
+	return render;
 
 }
 
