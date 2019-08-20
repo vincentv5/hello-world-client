@@ -19,7 +19,7 @@ if(localStorage.getItem('jwt')) {
 			store.dispatch(login(jwtDecode(localStorage.getItem('jwt'))))	
 
 		}catch{
-				store.dispatch(login({}))
+		store.dispatch(login({}))
 		}
 }
 
